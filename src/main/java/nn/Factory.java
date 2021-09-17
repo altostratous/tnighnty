@@ -15,6 +15,7 @@ public class Factory {
         IVariable[] lastLayerOutput = inputs;
         for (int i = 1; i < sizes.length; i++) {
             lastLayerOutput = new Linear(sizes[i - 1], sizes[i]).apply(lastLayerOutput);
+            lastLayerOutput = new Sigmoid().apply(lastLayerOutput);
         }
         return new Model(inputs, lastLayerOutput);
     }
