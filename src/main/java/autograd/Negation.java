@@ -2,19 +2,20 @@ package autograd;
 
 import jdk.jshell.spi.ExecutionControl;
 
-public class Addition extends Operator {
+public class Negation extends Operator {
+
+    public Negation() {
+        this.numberOfOperands = 1;
+    }
+
     @Override
     public double evaluate(IVariable[] operands) {
-        double result = 0.;
-        for (IVariable operand :
-                operands) {
-            result += operand.evaluate();
-        }
-        return result;
+        validateOperands(operands);
+        return -operands[0].evaluate();
     }
 
     @Override
     public void backwards(IVariable[] operands, IVariable[] sources, double gradient) throws ExecutionControl.NotImplementedException {
-
+        operands[0].backward(sources, -gradient);
     }
 }
