@@ -3,6 +3,11 @@ package autograd;
 import jdk.jshell.spi.ExecutionControl;
 
 public class Sigmoid extends Operator{
+
+    public Sigmoid() {
+        this.numberOfOperands = 1;
+    }
+
     @Override
     public double evaluate(IVariable[] operands) {
         if (operands.length != 1) {

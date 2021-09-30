@@ -40,7 +40,7 @@ public class Parameter implements IVariable {
 
     @Override
     public Parameter[] getParameters() {
-        return new Parameter[0];
+        return new Parameter[] { this };
     }
 
     public double getValue() {

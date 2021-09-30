@@ -17,10 +17,10 @@ public class Exponentiation extends Operator {
         var baseValue = baseVariable.evaluate();
         IVariable exponentVariable = operands[1];
         var exponentValue = exponentVariable.evaluate();
-        if (exponentVariable.getParameters().length > 0) {
+        if (exponentVariable.getParameters().length > 1) {
             throw new ExecutionControl.NotImplementedException("Back propagation to the exponent is not implemented.");
         }
-        var gradientToPropagate = Math.pow(gradient * exponentValue, exponentValue - 1);
+        var gradientToPropagate = Math.pow(gradient * baseValue * exponentValue, exponentValue - 1);
         baseVariable.backward(sources, gradientToPropagate);
     }
 }

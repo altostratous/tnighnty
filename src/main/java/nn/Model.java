@@ -40,10 +40,7 @@ public class Model {
 
     public Parameter[] getTrainableParameters() {
         var results = new HashSet<Parameter>();
-        for (Parameter p :
-                getParameters()) {
-            results.add(p);
-        }
+        results.addAll(Arrays.asList(getParameters()));
         for (Parameter p: input) {
             results.remove(p);
         }

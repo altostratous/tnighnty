@@ -13,8 +13,11 @@ public abstract class Operator implements IOperator {
     }
 
     protected void validateOperands(IVariable[] operands) {
+        if (this.numberOfOperands == null) {
+            return;
+        }
         if (operands.length != this.numberOfOperands) {
-            throw new IllegalArgumentException("Negation accepts only one operand.");
+            throw new IllegalArgumentException(String.format("%s accepts only one operand.", this.getClass().getName()));
         }
     }
 }

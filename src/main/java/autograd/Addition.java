@@ -15,6 +15,9 @@ public class Addition extends Operator {
 
     @Override
     public void backwards(IVariable[] operands, IVariable[] sources, double gradient) throws ExecutionControl.NotImplementedException {
-
+        for (IVariable o :
+                operands) {
+            o.backward(sources, gradient);
+        }
     }
 }
