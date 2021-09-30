@@ -34,4 +34,8 @@ public class Operation implements IVariable {
         }
         return result.toArray(new Parameter[0]);
     }
+
+    public IVariable[] getOperands() {
+        return operands;
+    }
 }

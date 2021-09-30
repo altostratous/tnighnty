@@ -6,6 +6,11 @@ public class Parameter implements IVariable {
     private double value;
     private double gradient;
     private boolean trainable;
+    private int layer;
+
+    public Parameter() {
+
+    }
 
     public static IVariable[] createTensor(double[] desired) {
         var result = new Parameter[desired.length];
@@ -58,5 +63,17 @@ public class Parameter implements IVariable {
 
     public boolean isTrainable() {
         return this.trainable;
+    }
+
+    public void zeroGradient() {
+        this.setGradient(0);
+    }
+
+    public int getLayer() {
+        return layer;
+    }
+
+    public void setLayer(int layer) {
+        this.layer = layer;
     }
 }

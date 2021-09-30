@@ -30,7 +30,8 @@ public class NeuralNetworkTest {
         double delta = 1e-5;
         double expected = 0.9892621636390686; // obtained by pytorch
         Assert.assertEquals(result[0], expected, delta);
-        var loss = new MinimumSquaredError(model.getOutput(), Parameter.createTensor(desired));
+        var loss = new MinimumSquaredError(model.getOutput());
+        loss.setDesired(desired);
         loss.backward(parameters, 1);
         var gradients = new double[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
@@ -72,7 +73,8 @@ public class NeuralNetworkTest {
         double delta = 1e-5;
         double expected = 0.8904789686203003; // obtained by pytorch
         Assert.assertEquals(expected, result[0], delta);
-        var loss = new MinimumSquaredError(model.getOutput(), Parameter.createTensor(desired));
+        var loss = new MinimumSquaredError(model.getOutput());
+        loss.setDesired(desired);
         loss.backward(parameters, 1);
         var gradients = new double[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
