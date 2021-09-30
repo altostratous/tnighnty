@@ -4,7 +4,7 @@ import autograd.IVariable;
 import autograd.Parameter;
 
 public class Factory {
-    public static Model createNeuralNetwork(int[] sizes) {
+    public static Model createNeuralNetwork(int[] sizes, ILayer activation) {
         if (sizes.length < 2) {
             throw new IllegalArgumentException("Sizes must at least contain 2 integers for the first and the second layer.");
         }
@@ -15,7 +15,7 @@ public class Factory {
         IVariable[] lastLayerOutput = inputs;
         for (int i = 1; i < sizes.length; i++) {
             lastLayerOutput = new Linear(sizes[i - 1], sizes[i]).apply(lastLayerOutput);
-            lastLayerOutput = new Sigmoid().apply(lastLayerOutput);
+            lastLayerOutput = activation.apply(lastLayerOutput);
         }
         return new Model(inputs, lastLayerOutput);
     }

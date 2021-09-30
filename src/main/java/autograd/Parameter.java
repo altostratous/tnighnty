@@ -5,6 +5,7 @@ import java.util.Arrays;
 public class Parameter implements IVariable {
     private double value;
     private double gradient;
+    private boolean trainable;
 
     public static IVariable[] createTensor(double[] desired) {
         var result = new Parameter[desired.length];
@@ -19,7 +20,11 @@ public class Parameter implements IVariable {
     }
 
     public Parameter(double value) {
-        this.value = value;
+        this.value = value; trainable = true;
+    }
+
+    public Parameter(double value, boolean trainable) {
+        this.value = value; this.trainable = trainable;
     }
 
     @Override
@@ -49,5 +54,9 @@ public class Parameter implements IVariable {
 
     public double getGradient() {
         return gradient;
+    }
+
+    public boolean isTrainable() {
+        return this.trainable;
     }
 }

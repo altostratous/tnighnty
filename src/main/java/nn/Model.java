@@ -3,10 +3,7 @@ package nn;
 import autograd.IVariable;
 import autograd.Parameter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Model {
     private Parameter[] input;
@@ -40,10 +37,16 @@ public class Model {
 
     public Parameter[] getTrainableParameters() {
         var results = new HashSet<Parameter>();
-        results.addAll(Arrays.asList(getParameters()));
+        for (Parameter p :
+                getParameters()) {
+            if (p.isTrainable()) {
+                results.add(p);
+            }
+        }
         for (Parameter p: input) {
             results.remove(p);
         }
+
         return results.toArray(new Parameter[0]);
     }
 
