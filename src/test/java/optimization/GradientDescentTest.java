@@ -81,7 +81,7 @@ public class GradientDescentTest {
             var dataSet = new BinaryToBipolarWrapper(new XORBinaryDataSet());
             var optimizer = new GradientDescent(0.2, 0.9);
             var loss = new MinimumSquaredError(model.getOutput());
-            double finalLoss = model.fit(dataSet, optimizer, loss, 30, 0.05);
+            double finalLoss = model.fit(dataSet, optimizer, loss, 40, 0.05);
             if (finalLoss > 0.05) {
                 diverged += 1;
             }
