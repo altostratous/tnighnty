@@ -1,0 +1,147 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amssymb} % needed for math
+\usepackage{amsmath} % needed for math
+\usepackage[utf8]{inputenc} % this is needed for german umlauts
+\usepackage[ngerman]{babel} % this is needed for german umlauts
+\usepackage[T1]{fontenc}    % this is needed for correct output of umlauts in pdf
+\usepackage[margin=2.5cm]{geometry} %layout
+\usepackage{listings} % needed for the inclusion of source code
+
+% the following is needed for syntax highlighting
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Java,                  % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+% this is needed for forms and links within the text
+\usepackage{hyperref}
+\usepackage[toc,page]{appendix}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Variablen                                                          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\authorName}{Ali Asgari Khoshouyeh (Student \#24868739)}
+\newcommand{\tags}{\authorName, my, tags}
+\title{CPEN 502 Assignment-a: Backpropagation (BP)}
+\author{\authorName}
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PDF Meta information                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{
+  pdfauthor   = {\authorName},
+  pdfkeywords = {\tags},
+  pdftitle    = {Backpropagation}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE DOCUMENT BEGINS                                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+\section{Simple BP and Binary Representation}
+Set up your network in a 2-input, 4-hidden and 1-output configuration. Apply the XOR training set. Initialize weights to random values in the range -0.5 to +0.5 and set the learning rate to 0.2 with momentum at 0.0.
+
+Define your XOR problem using a binary representation. Draw a graph of total error against number of epochs. On average, how many epochs does it take to reach a total error of less than 0.05? You should perform many trials to get your results, although you don’t need to plot them all.
+
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=a) epochs,
+        width=\textwidth,
+        ylabel=MSE,
+        xticklabel style={rotate=15},          
+]
+    \addplot[smooth,mark=.,blue] table {a.tex};
+    \addlegendentry{Momentum = 0, Binary}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+
+Out of \textbf{300} trials, on average it took \textbf{\input{a_avg.tex}} epochs for the simple backpropagation algorithm to achieve the error of less than 0.05. 
+
+Please note that through this report the backpropagation is done layer by layer from the last layer, i.e. first the last layer parameters are updated, then a new error signal is calculated for the hidden layer. 
+
+\section{Bipolar representation}
+This time use a bipolar representation. Again, graph your results to show the total error varying against number of epochs. On average, how many epochs to reach a total error of less than 0.05?
+
+
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=b) epochs,
+        width=\textwidth,
+        ylabel=MSE]
+    \addplot[smooth,mark=.,blue] table {b.tex};
+    \addlegendentry{Momentum = 0, Bipolar}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+
+Out of \textbf{300} trials, on average it took \textbf{\input{b_avg.tex}} epochs for the simple backpropagation algorithm to achieve the error of less than 0.05. 
+
+\section{Adding momentum}
+Now set the momentum to 0.9. What does the graph look like now and how fast can 0.05 be reached?
+
+
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=c) epochs,
+        width=\textwidth,
+        ylabel=MSE]
+    \addplot[smooth,mark=x,blue] table {c.tex};
+    \addlegendentry{Momentum = 0.9, Bipolar}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+
+Out of \textbf{300} trials, on average it took \textbf{\input{c_avg.tex}} epochs for the simple backpropagation algorithm to achieve the error of less than 0.05. 
+
+
+\begin{appendices}
+\section{Source Codes}
+    \input{sources.tex}
+\end{appendices}
+
+\end{document}

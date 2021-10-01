@@ -12,7 +12,10 @@ public class MinimumSquaredError implements IVariable, ILoss {
     public MinimumSquaredError(IVariable[] output) {
         var negation = new Negation();
         var addition = new Addition();
+        var multiplication = new Multiplication();
         var exponentiation = new Exponentiation();
+        Parameter two = new Parameter(2, false);
+        Parameter half = new Parameter(0.5, false);
         int length = output.length;
         desired = new Parameter[output.length];
         var summationTerms = new IVariable[length];
@@ -20,10 +23,10 @@ public class MinimumSquaredError implements IVariable, ILoss {
             desired[i] = new Parameter();
             summationTerms[i] = exponentiation.apply(
                     addition.apply(output[i], negation.apply(desired[i])),
-                    new Parameter(2, false)
+                    two
             );
         }
-        this.operation = addition.apply(summationTerms);
+        this.operation = multiplication.apply(addition.apply(summationTerms), half);
     }
 
     @Override

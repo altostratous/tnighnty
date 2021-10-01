@@ -2,8 +2,6 @@ package autograd;
 
 import jdk.jshell.spi.ExecutionControl;
 
-import java.util.ArrayList;
-
 public class Multiplication extends Operator{
 
     @Override

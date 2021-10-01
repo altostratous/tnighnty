@@ -9,7 +9,10 @@ import jdk.jshell.spi.ExecutionControl;
 import optimization.ILoss;
 import optimization.IOptimizer;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Model {
@@ -60,8 +63,10 @@ public class Model {
     public IVariable[] getOutput() {
         return output;
     }
-
     public double fit(IDataSet dataSet, IOptimizer optimizer, ILoss loss, int epochs, double lossLimit) throws ExecutionControl.NotImplementedException {
+        return fit(dataSet, optimizer, loss, epochs, lossLimit, (epoch, l) -> {});
+    }
+    public double fit(IDataSet dataSet, IOptimizer optimizer, ILoss loss, int epochs, double lossLimit, IFitCallback callback) throws ExecutionControl.NotImplementedException {
         var parameters = getTrainableParameters();
         Map<Integer, List<Parameter>> layeredParameters = layerParameters(parameters);
         if (epochs < 1) {
@@ -82,6 +87,7 @@ public class Model {
                     optimizer.update(layerParameters);
                 }
             }
+            callback.collect(i, totalLoss);
             if (totalLoss < lossLimit) {
                 break;
             }
