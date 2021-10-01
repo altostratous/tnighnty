@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Model {
-    private Parameter[] input;
-    private IVariable[] output;
+    private final Parameter[] input;
+    private final IVariable[] output;
 
     public Model(Parameter[] input, IVariable[] output) {
         this.input = input;
@@ -53,7 +53,7 @@ public class Model {
                 results.add(p);
             }
         }
-        for (Parameter p: input) {
+        for (Parameter p : input) {
             results.remove(p);
         }
 
@@ -63,9 +63,12 @@ public class Model {
     public IVariable[] getOutput() {
         return output;
     }
+
     public double fit(IDataSet dataSet, IOptimizer optimizer, ILoss loss, int epochs, double lossLimit) throws ExecutionControl.NotImplementedException {
-        return fit(dataSet, optimizer, loss, epochs, lossLimit, (epoch, l) -> {});
+        return fit(dataSet, optimizer, loss, epochs, lossLimit, (epoch, l) -> {
+        });
     }
+
     public double fit(IDataSet dataSet, IOptimizer optimizer, ILoss loss, int epochs, double lossLimit, IFitCallback callback) throws ExecutionControl.NotImplementedException {
         var parameters = getTrainableParameters();
         Map<Integer, List<Parameter>> layeredParameters = layerParameters(parameters);
@@ -81,7 +84,7 @@ public class Model {
                 setInput(dataPoint.getX());
                 loss.setDesired(dataPoint.getY());
                 totalLoss += loss.evaluate();
-                for (Integer j: layeredParameters.keySet().stream().sorted().toList()) {
+                for (Integer j : layeredParameters.keySet().stream().sorted().toList()) {
                     Parameter[] layerParameters = layeredParameters.get(j).toArray(new Parameter[0]);
                     loss.backward(layerParameters, 1.);
                     optimizer.update(layerParameters);
@@ -104,7 +107,7 @@ public class Model {
     private void setLayers(IVariable[] outputs, int layer) {
         if (outputs.length == 0) return;
         HashSet<IVariable> nextOutput = new HashSet<>();
-        for (IVariable i: outputs) {
+        for (IVariable i : outputs) {
             if (i instanceof Parameter) {
                 ((Parameter) i).setLayer(layer);
             }

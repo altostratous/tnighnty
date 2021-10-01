@@ -3,7 +3,7 @@ package nn;
 import autograd.IVariable;
 import autograd.Parameter;
 
-public class BipolarSigmoid implements ILayer{
+public class BipolarSigmoid implements ILayer {
 
     @Override
     public IVariable[] apply(IVariable[] input) {

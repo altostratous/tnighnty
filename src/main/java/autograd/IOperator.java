@@ -4,7 +4,7 @@ package autograd;
 import jdk.jshell.spi.ExecutionControl;
 
 public interface IOperator {
-    public IVariable apply(IVariable ...operands);
+    IVariable apply(IVariable... operands);
 
     double evaluate(IVariable[] operands);
 

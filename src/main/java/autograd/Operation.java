@@ -6,10 +6,10 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class Operation implements IVariable {
-    private IOperator operator;
-    private IVariable[] operands;
+    private final IOperator operator;
+    private final IVariable[] operands;
 
-    public Operation(IOperator operator, IVariable ...operands) {
+    public Operation(IOperator operator, IVariable... operands) {
         this.operator = operator;
         this.operands = operands;
     }

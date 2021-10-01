@@ -2,19 +2,19 @@ package dataset;
 
 public class XORBinaryDataSet implements IDataSet {
 
+    protected double[][] x;
+    protected double[] y;
     private int index;
-    protected double[][]x;
-    protected double[]y;
 
     public XORBinaryDataSet() {
         index = 0;
-        x = new double[][] {
+        x = new double[][]{
                 {0., 0.},
                 {0., 1.},
                 {1., 0.},
                 {1., 1.},
         };
-        y = new double[] {
+        y = new double[]{
                 0.,
                 1.,
                 1.,
@@ -26,7 +26,7 @@ public class XORBinaryDataSet implements IDataSet {
     public DataPoint next() {
         if (index < x.length) {
             var result = new DataPoint(x[index], new double[]{y[index]});
-            index ++;
+            index++;
             return result;
         }
         return null;

@@ -2,7 +2,7 @@ package nn;
 
 import autograd.IVariable;
 
-public class Sigmoid implements ILayer{
+public class Sigmoid implements ILayer {
 
     @Override
     public IVariable[] apply(IVariable[] input) {

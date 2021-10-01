@@ -21,6 +21,7 @@ public class Factory {
         }
         return new Model(inputs, lastLayerOutput);
     }
+
     public static Model createNeuralNetwork(int[] sizes, ILayer activation) {
         return createNeuralNetwork(sizes, activation, new UniformInitializer(-0.5, 0.5));
     }

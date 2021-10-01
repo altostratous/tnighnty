@@ -2,7 +2,7 @@ package autograd;
 
 import jdk.jshell.spi.ExecutionControl;
 
-public class Sigmoid extends Operator{
+public class Sigmoid extends Operator {
 
     public Sigmoid() {
         this.numberOfOperands = 1;
@@ -19,7 +19,7 @@ public class Sigmoid extends Operator{
     @Override
     public void backwards(IVariable[] operands, IVariable[] sources, double gradient) throws ExecutionControl.NotImplementedException {
         validateOperands(operands);
-        var x= operands[0];
+        var x = operands[0];
         var y = evaluate(operands);
         x.backward(sources, gradient * y * (1 - y));
     }

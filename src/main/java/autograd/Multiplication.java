@@ -2,7 +2,7 @@ package autograd;
 
 import jdk.jshell.spi.ExecutionControl;
 
-public class Multiplication extends Operator{
+public class Multiplication extends Operator {
 
     @Override
     public double evaluate(IVariable[] operands) {

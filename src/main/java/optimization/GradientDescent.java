@@ -4,11 +4,11 @@ import autograd.Parameter;
 
 import java.util.HashMap;
 
-public class GradientDescent implements IOptimizer{
+public class GradientDescent implements IOptimizer {
 
-    private HashMap<Parameter, Double> lastDelta;
-    private double learningRate;
-    private double momentum;
+    private final HashMap<Parameter, Double> lastDelta;
+    private final double learningRate;
+    private final double momentum;
 
     public GradientDescent(double learningRate, double momentum) {
         this.lastDelta = new HashMap<>();

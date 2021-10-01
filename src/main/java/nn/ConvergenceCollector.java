@@ -2,7 +2,7 @@ package nn;
 
 import java.util.ArrayList;
 
-public class ConvergenceCollector implements IFitCallback{
+public class ConvergenceCollector implements IFitCallback {
     ArrayList<Double> loss;
 
     public ConvergenceCollector() {
@@ -22,7 +22,7 @@ public class ConvergenceCollector implements IFitCallback{
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < loss.size(); i++) {
-            sb.append(+ i + " " + loss.get(i) + "\n");
+            sb.append(+i + " " + loss.get(i) + "\n");
         }
         return sb.toString();
     }

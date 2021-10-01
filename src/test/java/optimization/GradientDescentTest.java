@@ -21,7 +21,7 @@ public class GradientDescentTest {
     @Test
     public void TestSimpleGD() throws ExecutionControl.NotImplementedException {
         var model = Factory.createNeuralNetwork(
-                new int[] {2, 4, 1},
+                new int[]{2, 4, 1},
                 new Sigmoid(),
                 new UniformInitializer(-0.5, 0.5)
         );
@@ -38,7 +38,7 @@ public class GradientDescentTest {
         ArrayList<ConvergenceCollector> stats = new ArrayList<>();
         for (int i = 0; i < GradientDescentTest.trials; i++) {
             var model = Factory.createNeuralNetwork(
-                    new int[] {2, 4, 1},
+                    new int[]{2, 4, 1},
                     new Sigmoid(),
                     new UniformInitializer(-0.5, 0.5)
             );
@@ -75,7 +75,7 @@ public class GradientDescentTest {
         ArrayList<ConvergenceCollector> stats = new ArrayList<>();
         for (int i = 0; i < trials; i++) {
             var model = Factory.createNeuralNetwork(
-                    new int[] {2, 4, 1},
+                    new int[]{2, 4, 1},
                     new BipolarSigmoid(),
                     new UniformInitializer(-0.5, 0.5)
             );
@@ -101,7 +101,7 @@ public class GradientDescentTest {
         ArrayList<ConvergenceCollector> stats = new ArrayList<>();
         for (int i = 0; i < trials; i++) {
             var model = Factory.createNeuralNetwork(
-                    new int[] {2, 4, 1},
+                    new int[]{2, 4, 1},
                     new BipolarSigmoid(),
                     new UniformInitializer(-0.5, 0.5)
             );
