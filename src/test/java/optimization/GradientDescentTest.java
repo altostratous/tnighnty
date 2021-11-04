@@ -6,6 +6,7 @@ import dataset.XORBinaryDataSet;
 import jdk.jshell.spi.ExecutionControl;
 import nn.*;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.FileWriter;
@@ -32,6 +33,7 @@ public class GradientDescentTest {
         Assert.assertTrue("Big loss " + finalLoss, finalLoss < 0.05);
     }
 
+    @Ignore("Skipping slow convergence tests.")
     @Test
     public void TestConvergence() throws ExecutionControl.NotImplementedException, IOException {
         int diverged = 0;
@@ -68,6 +70,7 @@ public class GradientDescentTest {
         of.close();
     }
 
+    @Ignore("Skipping slow convergence tests.")
     @Test
     public void TestBipolarGD() throws ExecutionControl.NotImplementedException, IOException {
         int diverged = 0;
