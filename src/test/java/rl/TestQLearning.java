@@ -1,19 +1,15 @@
 package rl;
 
-import action.IAction;
-import action.Move;
+import representation.*;
 import fa.IFunctionApproximation;
 import fa.LUT;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import policy.GetAway;
 import policy.IPolicy;
 import robocode.Robot;
 import robot.FunctionApproximationRobot;
 import robot.TopLeftCornerRobot;
-import state.Coordinates;
-import state.IState;
 import utils.AutoRoboCode;
 import utils.FinalStatesCollector;
 
@@ -21,13 +17,13 @@ import java.util.ArrayList;
 
 public class TestQLearning {
 
-    @Ignore("Skipping not implemented test.")
     @Test
     public void TestTrivialLUTRobot() {
-        IAction action = new Move();
-        IState state = new Coordinates();
+        IActionRepresentation actionRepresentation = new MoveRepresentation();
+        IStateRepresentation stateRepresentation = new CoordinatesRepresentation();
+        ActionStateRepresentation representation = new ActionStateRepresentation(stateRepresentation, actionRepresentation);
         ILearning learning = new QLearning();
-        IFunctionApproximation functionApproximation = new LUT(state, action, learning);
+        IFunctionApproximation functionApproximation = new LUT(representation, learning);
         IPolicy policy = new GetAway();
         Robot opponent = new TopLeftCornerRobot();
         Robot robot = new FunctionApproximationRobot(functionApproximation, policy);
@@ -36,6 +32,7 @@ public class TestQLearning {
             AutoRoboCode.battle(opponent, robot, collector);
         }
         ArrayList<IState> states = collector.getFinalStates();
+        Assert.assertTrue("Seemingly battle didn't happen. No state is collected.", states.size() > 1);
         IState lastRun = states.get(states.size() - 1);
         IState firstRun = states.get(0);
         Assert.assertTrue(

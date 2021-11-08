@@ -1,7 +1,6 @@
 package policy;
 
-import state.Coordinates;
-import state.IState;
+import representation.IState;
 
 public interface IPolicy {
     double getReward(IState run);

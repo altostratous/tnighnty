@@ -1,8 +1,6 @@
 package utils;
 
-import nn.IFitCallback;
-import state.Coordinates;
-import state.IState;
+import representation.IState;
 
 import java.util.ArrayList;
 

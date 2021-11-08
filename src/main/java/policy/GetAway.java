@@ -1,6 +1,6 @@
 package policy;
 
-import state.IState;
+import representation.IState;
 
 public class GetAway implements IPolicy {
     @Override

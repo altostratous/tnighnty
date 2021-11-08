@@ -1,11 +1,21 @@
 package fa;
 
-import action.IAction;
+import representation.IRepresentable;
+import representation.IRepresentation;
 import rl.ILearning;
-import state.IState;
 
 public class LUT implements IFunctionApproximation {
-    public LUT(IState state, IAction action, ILearning learning) {
+    public LUT(IRepresentation representation, ILearning learning) {
+
+    }
+
+    @Override
+    public void train(IRepresentable input, double[] output) {
+
+    }
+
+    @Override
+    public void eval(IRepresentable input, double[] output) {
 
     }
 }
