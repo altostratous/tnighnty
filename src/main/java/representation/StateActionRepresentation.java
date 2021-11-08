@@ -1,10 +1,10 @@
 package representation;
 
-public class ActionStateRepresentation implements IRepresentation {
+public class StateActionRepresentation implements IRepresentation {
     private IStateRepresentation stateRepresentation;
     private IActionRepresentation actionRepresentation;
 
-    public ActionStateRepresentation(IStateRepresentation stateRepresentation, IActionRepresentation actionRepresentation) {
+    public StateActionRepresentation(IStateRepresentation stateRepresentation, IActionRepresentation actionRepresentation) {
         this.stateRepresentation = stateRepresentation;
         this.actionRepresentation = actionRepresentation;
     }

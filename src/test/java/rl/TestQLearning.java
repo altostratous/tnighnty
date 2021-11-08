@@ -8,7 +8,7 @@ import org.junit.Test;
 import policy.GetAway;
 import policy.IPolicy;
 import robocode.Robot;
-import robot.FunctionApproximationRobot;
+import robot.QLearningRobot;
 import robot.TopLeftCornerRobot;
 import utils.AutoRoboCode;
 import utils.FinalStatesCollector;
@@ -21,12 +21,12 @@ public class TestQLearning {
     public void TestTrivialLUTRobot() {
         IActionRepresentation actionRepresentation = new MoveRepresentation();
         IStateRepresentation stateRepresentation = new CoordinatesRepresentation();
-        ActionStateRepresentation representation = new ActionStateRepresentation(stateRepresentation, actionRepresentation);
-        ILearning learning = new QLearning();
-        IFunctionApproximation functionApproximation = new LUT(representation, learning);
+        StateActionRepresentation representation = new StateActionRepresentation(stateRepresentation, actionRepresentation);
+        IFunctionApproximation functionApproximation = new LUT();
         IPolicy policy = new GetAway();
+        ILearning learning = new QLearning(representation, policy, functionApproximation);
         Robot opponent = new TopLeftCornerRobot();
-        Robot robot = new FunctionApproximationRobot(functionApproximation, policy);
+        Robot robot = new QLearningRobot(learning);
         FinalStatesCollector collector = new FinalStatesCollector();
         for (int i = 0; i < 100; i++) {
             AutoRoboCode.battle(opponent, robot, collector);
