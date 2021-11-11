@@ -19,4 +19,14 @@ public class MoveRepresentation implements IActionRepresentation {
             qLearningRobot.back(100);
         }
     }
+
+    @Override
+    public IAction[] getActions() {
+        return new IAction[] {
+            new Move(Move.ActionType.AHEAD),
+            new Move(Move.ActionType.BACK),
+            new Move(Move.ActionType.TURN_LEFT),
+            new Move(Move.ActionType.TURN_RIGHT),
+        };
+    }
 }

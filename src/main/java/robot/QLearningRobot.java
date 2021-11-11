@@ -3,6 +3,7 @@ package robot;
 import representation.IAction;
 import representation.IState;
 import rl.ILearning;
+import robocode.Event;
 import robocode.Robot;
 import robocode.ScannedRobotEvent;
 import robocode.StatusEvent;
@@ -12,9 +13,13 @@ public class QLearningRobot extends Robot {
     private IState state;
     private IState lastState;
 
+    @Override
+    public void run() {
+        super.run();
+        ahead(5);
+    }
+
     public QLearningRobot(ILearning learning) {
-
-
         this.learning = learning;
     }
 
@@ -25,9 +30,7 @@ public class QLearningRobot extends Robot {
     @Override
     public void onStatus(StatusEvent e) {
         super.onStatus(e);
-        setState(learning.getStateRepresentation().represent(getState(), e));
-        IAction action = learning.takeStep(getLastState(), getState());
-        learning.getActionRepresentation().takeAction(this, action);
+        processEvent(e);
     }
 
     private IState getLastState() {
@@ -41,7 +44,13 @@ public class QLearningRobot extends Robot {
     @Override
     public void onScannedRobot(ScannedRobotEvent event) {
         super.onScannedRobot(event);
+        processEvent(event);
+    }
+
+    private void processEvent(Event event) {
         setState(learning.getStateRepresentation().represent(getState(), event));
+        IAction action = learning.takeStep(getLastState(), getState());
+        learning.getActionRepresentation().takeAction(this, action);
     }
 
     public void setState(IState state) {

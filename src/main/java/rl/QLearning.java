@@ -4,6 +4,8 @@ import fa.IFunctionApproximation;
 import policy.IPolicy;
 import representation.*;
 
+import java.util.Random;
+
 public class QLearning implements ILearning {
 
     private IStateRepresentation stateRepresentation;
@@ -21,7 +23,13 @@ public class QLearning implements ILearning {
 
     @Override
     public IAction takeStep(IState lastStateAction, IState currentState) {
-        return null;
+
+        return explore();
+    }
+
+    private IAction explore() {
+        IAction[] actions = actionRepresentation.getActions();
+        return actions[new Random().nextInt(actions.length)];
     }
 
     @Override

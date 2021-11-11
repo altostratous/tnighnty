@@ -13,6 +13,7 @@ public class TopLeftCornerRobot extends Robot {
     @Override
     public void onStatus(StatusEvent e) {
         super.onStatus(e);
+        fire(1);
         var yDistance = getBattleFieldHeight() - getY();
         var xDistance = getX();
         var angle = Math.atan(yDistance / xDistance);
@@ -33,7 +34,7 @@ public class TopLeftCornerRobot extends Robot {
             }
         }
         if (absHeadingDiff < 0.01) {
-            ahead(10000);
+            ahead(100);
         }
     }
 }

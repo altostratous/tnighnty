@@ -7,6 +7,9 @@ import robocode.StatusEvent;
 public class CoordinatesRepresentation implements IStateRepresentation {
     @Override
     public IState represent(IState state, Event event) {
+        if (state == null) {
+            state = new Coordinates(0, 0, 0);
+        }
         Coordinates coordinates = (Coordinates) state.clone();
         if (event instanceof StatusEvent) {
             StatusEvent statusEvent = (StatusEvent) event;

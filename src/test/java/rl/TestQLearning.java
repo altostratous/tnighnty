@@ -37,7 +37,7 @@ public class TestQLearning {
             }
         });
         engine.setVisible(true);
-        int numberOfRounds = 5;
+        int numberOfRounds = 1;
         BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
         RobotSpecification[] selectedRobots = engine.getLocalRepository(robot.getClass().getCanonicalName() + "*," + opponent.getClass().getCanonicalName() + "*");
         BattleSpecification battleSpec = new BattleSpecification(numberOfRounds, battlefield, selectedRobots);
@@ -48,8 +48,10 @@ public class TestQLearning {
         IState lastRun = states.get(states.size() - 1);
         IState firstRun = states.get(0);
         IPolicy policy = robot.getLearning().getPolicy();
+        double initialReward = policy.getReward(firstRun);
+        double finalReward = policy.getReward(lastRun);
         Assert.assertTrue(
-                "Learning wasn't effective",
-                policy.getReward(firstRun) < policy.getReward(lastRun));
+                String.format("Learning wasn't effective, initial reward %f, final reward %f", initialReward, finalReward),
+                initialReward < finalReward);
     }
 }

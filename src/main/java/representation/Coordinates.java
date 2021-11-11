@@ -27,4 +27,8 @@ public class Coordinates implements IState {
     public IState clone() {
         return new Coordinates(this.x, this.y, this.enemyBearing);
     }
+
+    public int getX() {
+        return this.x;
+    }
 }
