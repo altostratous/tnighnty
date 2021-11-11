@@ -1,10 +1,12 @@
 package fa;
 
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import representation.IRepresentable;
 
 public class TestFunctionApproximation {
+    @Ignore
     @Test
     public void TestLUT() {
         LUT lut = new LUT();

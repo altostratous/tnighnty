@@ -43,11 +43,11 @@ public class LUT implements IFunctionApproximation {
                     for (int position = 0; position < position_level; position++) {
                         //double[] state_vector = {distance, robot_energy, enemy_energy, position};
                         //double key = indexFor(state_vector);
-                        State newState = new State(distance, robot_energy, enemy_energy, position);
+//                        State newState = new State(distance, robot_energy, enemy_energy, position);
                         // Q values are automatically set to 0 by default
-                        newState.addAll(); // add all actions for each state?
+//                        newState.addAll(); // add all actions for each state?
 
-                        StateMap.put(newState, newState);
+//                        StateMap.put(newState, newState);
 
                     }
                 }

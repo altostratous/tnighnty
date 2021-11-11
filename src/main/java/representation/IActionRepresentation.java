@@ -1,4 +1,7 @@
 package representation;
 
-public interface IActionRepresentation {
+import robocode.Robot;
+
+public interface IActionRepresentation extends IRepresentation {
+    void takeAction(Robot robot, IAction action);
 }

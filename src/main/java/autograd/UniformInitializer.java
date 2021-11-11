@@ -16,6 +16,6 @@ public class UniformInitializer implements IInitializer {
 
     @Override
     public double next() {
-        return random.nextDouble(a, b);
+        return random.nextDouble() * (b - a) + a;
     }
 }

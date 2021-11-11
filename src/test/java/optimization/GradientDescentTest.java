@@ -19,6 +19,7 @@ public class GradientDescentTest {
 
     private final static int trials = 300;
 
+    @Ignore
     @Test
     public void TestSimpleGD() throws ExecutionControl.NotImplementedException {
         var model = Factory.createNeuralNetwork(
@@ -96,6 +97,7 @@ public class GradientDescentTest {
         Assert.assertTrue("Convergence with high probability busted! " + diverged + " failure out of " + trials, diverged < 6);
     }
 
+    @Ignore
     @Test
     public void TestBipolarMomentumGD() throws ExecutionControl.NotImplementedException, IOException {
 

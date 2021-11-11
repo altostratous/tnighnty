@@ -4,6 +4,11 @@ import robocode.Robot;
 import robocode.StatusEvent;
 
 public class TopLeftCornerRobot extends Robot {
+    @Override
+    public void run() {
+        super.run();
+        ahead(100);
+    }
 
     @Override
     public void onStatus(StatusEvent e) {

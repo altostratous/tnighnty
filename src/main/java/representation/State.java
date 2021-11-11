@@ -23,24 +23,13 @@ public class State {
     // do nothing
 
     private int distance;
-    private int robot_energy;
-    private int enemy_energy;
-    private int position;
-
-    public State(){
-        //?
-    }
-
+    private int energy;
+    private int enemyEnergy;
+    private int x;
+    private int y;
+    private int enemyBearing;
 
     List<Action> actions = new ArrayList<Action>();
-
-    public State(int distance, int robot_energy, int enemy_energy, int position) {
-
-        this.distance = distance;
-        this.robot_energy = robot_energy;
-        this.enemy_energy = enemy_energy;
-        this.position = position;
-    }
 
     public void add(Action a) {
         actions.add(a);
@@ -59,12 +48,12 @@ public class State {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         State state = (State) o;
-        return distance == state.distance && robot_energy == state.robot_energy && enemy_energy == state.enemy_energy && position == state.position;
+        return distance == state.distance && energy == state.energy && enemyEnergy == state.enemyEnergy && x == state.x;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(distance, robot_energy, enemy_energy, position);
+        return Objects.hash(distance, energy, enemyEnergy, x);
     }
 
 

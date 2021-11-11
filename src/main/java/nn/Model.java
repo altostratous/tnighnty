@@ -84,7 +84,7 @@ public class Model {
                 setInput(dataPoint.getX());
                 loss.setDesired(dataPoint.getY());
                 totalLoss += loss.evaluate();
-                for (Integer j : layeredParameters.keySet().stream().sorted().toList()) {
+                for (Integer j : layeredParameters.keySet().stream().sorted().collect(Collectors.toList())) {
                     Parameter[] layerParameters = layeredParameters.get(j).toArray(new Parameter[0]);
                     loss.backward(layerParameters, 1.);
                     optimizer.update(layerParameters);

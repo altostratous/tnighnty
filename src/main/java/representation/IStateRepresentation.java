@@ -1,4 +1,7 @@
 package representation;
 
-public interface IStateRepresentation {
+import robocode.Event;
+
+public interface IStateRepresentation extends IRepresentation {
+    IState represent(IState state, Event event);
 }
