@@ -3,13 +3,13 @@ package fa;
 import representation.IRepresentable;
 import representation.State;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.HashMap;
 
 public class LUT implements IFunctionApproximation {
 
+    private final String filePath;
     int distance_level = 3;
     int robot_energy_level = 3;
     int enemy_energy_level = 3;
@@ -18,7 +18,9 @@ public class LUT implements IFunctionApproximation {
             enemy_energy_level * position_level);
 
 
-
+    public LUT(String filePath) {
+        this.filePath = filePath;
+    }
 
     public void save(File argFile) {
 
@@ -64,11 +66,8 @@ public class LUT implements IFunctionApproximation {
     @Override
     public void train(IRepresentable input, double[] output) {
         double[] repr = input.toVector();
-        for (int i = 0; i < repr.length; i++) {
-
-            System.out.print(repr[i]);
-        }
-        System.out.println(output[0]);
+        System.out.print("train " + input + " to " + output[0]);
+        System.out.println();
         this.StateMap.put(input, output);
     }
 
@@ -76,4 +75,16 @@ public class LUT implements IFunctionApproximation {
     public double[] eval(IRepresentable input) {
         return (double[]) StateMap.getOrDefault(input, new double[]{ 0 });
     }
+
+    @Override
+    public void save() throws IOException {
+        new ObjectOutputStream(new FileOutputStream(this.filePath)).writeObject(StateMap);
+    }
+
+    @Override
+    public void load() throws IOException, ClassNotFoundException {
+        this.StateMap = (HashMap) new ObjectInputStream(new FileInputStream(this.filePath)).readObject();
+    }
+
+
 }

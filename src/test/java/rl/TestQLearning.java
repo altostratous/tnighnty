@@ -24,20 +24,21 @@ public class TestQLearning {
         Robot opponent = new TopLeftCornerRobot();
         ArrayList<IState> states = new ArrayList<>();
         TrivialLUTRobot robot = new TrivialLUTRobot();
+        System.setProperty("NOSECURITY", "true");
         RobocodeEngine.setLogMessagesEnabled(false);
         RobocodeEngine engine = new RobocodeEngine(new java.io.File(System.getProperty("user.home") + "/robocode/"));
         engine.addBattleListener(new BattleAdaptor() {
             @Override
             public void onTurnEnded(TurnEndedEvent event) {
                 IRobotSnapshot robotSnapshot = event.getTurnSnapshot().getRobots()[0];
-                states.add(new Coordinates(
-                        (int) (robotSnapshot.getX() / 100),
-                        (int) (robotSnapshot.getY() / 100), 0));
+//                states.add(new Coordinates(
+//                        (int) (robotSnapshot.getX() / 100),
+//                        (int) (robotSnapshot.getY() / 100), 0));
                 System.out.println(robotSnapshot.getX());
             }
         });
         engine.setVisible(true);
-        int numberOfRounds = 1;
+        int numberOfRounds = 1000;
         BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
         RobotSpecification[] selectedRobots = engine.getLocalRepository(robot.getClass().getCanonicalName() + "*," + opponent.getClass().getCanonicalName() + "*");
         BattleSpecification battleSpec = new BattleSpecification(numberOfRounds, battlefield, selectedRobots);

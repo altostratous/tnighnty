@@ -1,8 +1,9 @@
 package representation;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Coordinates implements IState {
+public class Coordinates implements IState, Serializable {
     private int x;
     private int y;
     private int heading;
@@ -50,5 +51,18 @@ public class Coordinates implements IState {
     @Override
     public int hashCode() {
         return Objects.hash(x, y, heading);
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public String toString() {
+        return "Coordinates{" +
+                "x=" + x +
+                ", y=" + y +
+                ", heading=" + heading +
+                '}';
     }
 }

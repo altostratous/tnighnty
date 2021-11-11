@@ -1,15 +1,13 @@
 package representation;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Move implements IAction {
+public class Move implements IAction, Serializable {
     @Override
     public double[] toVector() {
         double value = 0;
         switch (actionType) {
-            case BACK:
-                value = 0;
-                break;
             case AHEAD:
                 value = 1;
                 break;
@@ -36,7 +34,6 @@ public class Move implements IAction {
         TURN_RIGHT,
         TURN_LEFT,
         AHEAD,
-        BACK,
     }
 
     ActionType actionType;

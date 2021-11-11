@@ -12,7 +12,7 @@ import java.util.Random;
 
 public class QLearning implements ILearning {
 
-    private final double epsilon;
+    private double epsilon;
     private final double alpha;
     private final double gamma;
     private final Random random;
@@ -42,46 +42,66 @@ public class QLearning implements ILearning {
         if (lastState == null || lastAction == null || currentState == null) {
             return explore();
         }
+        System.out.println("Current state " + currentState);
         IAction lastBestAction = exploit(lastState);
         IRepresentable oldSA = stateActionRepresentation.represent(
                 lastState,
                 lastAction
         );
-        double oldQ = functionApproximation.eval(oldSA)[0];
-        double r = policy.getReward(lastState);
-        double qMax = functionApproximation.eval(lastBestAction)[0];
-        functionApproximation.train(
-                oldSA,
-                new double[] {
-                        oldQ + alpha * (r + gamma * qMax - oldQ)
-                }
-        );
+        if (!lastState.equals(currentState)) {
+            double oldQ = functionApproximation.eval(oldSA)[0];
+            double r = policy.getReward(lastState);
+            double qMax = functionApproximation.eval(lastBestAction)[0];
+            functionApproximation.train(
+                    oldSA,
+                    new double[]{
+                            oldQ + alpha * (r + gamma * qMax - oldQ)
+                    }
+            );
+        }
         if (this.random.nextDouble() < this.epsilon) {
-            return explore();
+            IAction action = explore();
+            logAction(currentState, action, "explored");
+            return action;
         } else {
-            return exploit(currentState);
+            IAction bestAction = exploit(currentState);
+            logAction(currentState, bestAction, "exploited");
+            return bestAction;
         }
     }
 
     private IAction exploit(IState currentState) {
-        Optional<IAction> bestAction = Arrays.stream(actionRepresentation.getActions()).max(
-                Comparator.comparing(
-                        (action) -> functionApproximation.eval(
-                                stateActionRepresentation.represent(
-                                        currentState, action
-                                ))[0]));
-        assert bestAction.isPresent();
-        System.out.println(bestAction.get());
+        double bestQ = 0;
+        IAction bestAction = actionRepresentation.getActions()[0];
+        for (IAction action: actionRepresentation.getActions()) {
+            double q = functionApproximation.eval(
+                    stateActionRepresentation.represent(
+                            currentState, action
+                    ))[0];
+            System.out.print("    " + q + " " + action);
+            System.out.println();
+            if (q > bestQ) {
+                bestAction = action;
+                bestQ = q;
+            }
+        }
+        return bestAction;
+    }
+
+    private void logAction(IState currentState, IAction bestAction, String hint) {
+        if (bestAction == null) return;
+        System.out.print(bestAction);
+        System.out.print(" " + hint + " ");
         System.out.println(functionApproximation.eval(
                 stateActionRepresentation.represent(
-                        currentState, bestAction.get()
+                        currentState, bestAction
                 ))[0]);
-        return bestAction.get();
     }
 
     private IAction explore() {
         IAction[] actions = actionRepresentation.getActions();
-        return actions[getRandom().nextInt(actions.length)];
+        IAction action = actions[getRandom().nextInt(actions.length)];
+        return action;
     }
 
     @NotNull
@@ -102,5 +122,18 @@ public class QLearning implements ILearning {
     @Override
     public IPolicy getPolicy() {
         return policy;
+    }
+
+    @Override
+    public IFunctionApproximation getFunctionApproximation() {
+        return functionApproximation;
+    }
+
+    public void setEpsilon(double epsilon) {
+        this.epsilon = epsilon;
+    }
+
+    public double getEpsilon() {
+        return this.epsilon;
     }
 }

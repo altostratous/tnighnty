@@ -1,5 +1,7 @@
 package rl;
 
+import fa.IFunctionApproximation;
+import fa.LUT;
 import policy.IPolicy;
 import representation.*;
 
@@ -10,4 +12,6 @@ public interface ILearning {
     IActionRepresentation getActionRepresentation();
 
     IPolicy getPolicy();
+
+    IFunctionApproximation getFunctionApproximation();
 }

@@ -5,18 +5,17 @@ import robocode.Robot;
 public class MoveRepresentation implements IActionRepresentation {
     @Override
     public void takeAction(Robot qLearningRobot, IAction action) {
+        if (action == null) return;
         if (!(action instanceof Move)) {
             throw new IllegalArgumentException("Move representation can only take move actions.");
         }
         Move move = (Move) action;
         if (move.getActionType() == Move.ActionType.TURN_LEFT) {
-            qLearningRobot.turnLeft(90);
+            qLearningRobot.turnLeft(35);
         } else if (move.getActionType() == Move.ActionType.TURN_RIGHT) {
-            qLearningRobot.turnRight(90);
+            qLearningRobot.turnRight(35);
         } else if (move.getActionType() == Move.ActionType.AHEAD) {
-            qLearningRobot.ahead(100);
-        } else if (move.getActionType() == Move.ActionType.BACK) {
-            qLearningRobot.back(100);
+            qLearningRobot.ahead(110);
         }
     }
 
@@ -24,7 +23,6 @@ public class MoveRepresentation implements IActionRepresentation {
     public IAction[] getActions() {
         return new IAction[] {
             new Move(Move.ActionType.AHEAD),
-            new Move(Move.ActionType.BACK),
             new Move(Move.ActionType.TURN_LEFT),
             new Move(Move.ActionType.TURN_RIGHT),
         };

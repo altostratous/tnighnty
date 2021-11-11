@@ -3,10 +3,12 @@ package policy;
 import representation.Coordinates;
 import representation.IState;
 
-public class GoRight implements IPolicy {
+public class GoTopRight implements IPolicy {
     @Override
     public double getReward(IState run) {
         Coordinates coordinates = (Coordinates) run;
-        return coordinates.getX();
+        var x = coordinates.getX();
+        var y = coordinates.getY();
+        return x * y;
     }
 }

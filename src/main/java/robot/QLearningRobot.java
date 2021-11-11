@@ -3,10 +3,15 @@ package robot;
 import representation.IAction;
 import representation.IState;
 import rl.ILearning;
+import rl.QLearning;
+import robocode.*;
 import robocode.Event;
 import robocode.Robot;
-import robocode.ScannedRobotEvent;
-import robocode.StatusEvent;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 public class QLearningRobot extends Robot {
     private ILearning learning;
@@ -22,6 +27,13 @@ public class QLearningRobot extends Robot {
 
     public QLearningRobot(ILearning learning) {
         this.learning = learning;
+        try {
+            this.learning.getFunctionApproximation().load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     public ILearning getLearning() {
@@ -49,7 +61,8 @@ public class QLearningRobot extends Robot {
     }
 
     private void processEvent(Event event) {
-        setState(learning.getStateRepresentation().represent(getState(), event));
+        IState newState = learning.getStateRepresentation().represent(getState(), event);
+        setState(newState);
         IAction action = learning.takeStep(getLastState(), getLastAction(), getState());
         takeAction(action);
     }
@@ -60,11 +73,22 @@ public class QLearningRobot extends Robot {
 
     private void takeAction(IAction action) {
         learning.getActionRepresentation().takeAction(this, action);
-        lastAction = action;
+        if (action != null) lastAction = action;
     }
 
     public void setState(IState state) {
-        this.lastState = this.state;
-        this.state = state;
+        if (!state.equals(this.lastState)) {
+            this.lastState = this.state;
+            this.state = state;
+        }
+    }
+
+    @Override
+    public void onRoundEnded(RoundEndedEvent event) {
+        try {
+            learning.getFunctionApproximation().save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

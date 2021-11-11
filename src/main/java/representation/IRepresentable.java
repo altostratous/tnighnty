@@ -1,5 +1,7 @@
 package representation;
 
-public interface IRepresentable {
+import java.io.Serializable;
+
+public interface IRepresentable extends Serializable {
     double[] toVector();
 }
