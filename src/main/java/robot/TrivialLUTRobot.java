@@ -4,10 +4,7 @@ import fa.IFunctionApproximation;
 import fa.LUT;
 import policy.GoRight;
 import policy.IPolicy;
-import representation.CoordinatesRepresentation;
-import representation.IActionRepresentation;
-import representation.IStateRepresentation;
-import representation.MoveRepresentation;
+import representation.*;
 import rl.ILearning;
 import rl.QLearning;
 
@@ -22,6 +19,12 @@ public class TrivialLUTRobot extends QLearningRobot {
         IStateRepresentation stateRepresentation = new CoordinatesRepresentation();
         IFunctionApproximation functionApproximation = new LUT();
         IPolicy policy = new GoRight();
-        return new QLearning(stateRepresentation, actionRepresentation, policy, functionApproximation);
+        return new QLearning(
+                stateRepresentation,
+                actionRepresentation,
+                new Concatenation(),
+                policy,
+                functionApproximation,
+                0.8, 0.2, 0.8);
     }
 }

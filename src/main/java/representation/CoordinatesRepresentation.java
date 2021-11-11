@@ -15,10 +15,7 @@ public class CoordinatesRepresentation implements IStateRepresentation {
             StatusEvent statusEvent = (StatusEvent) event;
             coordinates.setX((int) (statusEvent.getStatus().getX() / 100));
             coordinates.setY((int) (statusEvent.getStatus().getY() / 100));
-        }
-        if (event instanceof ScannedRobotEvent) {
-            ScannedRobotEvent scannedRobotEvent = (ScannedRobotEvent) event;
-            coordinates.setEnemyBearing((int) (scannedRobotEvent.getBearing() / 90));
+            coordinates.setHeading((int) (statusEvent.getStatus().getHeading() / 90));
         }
         return coordinates;
     }

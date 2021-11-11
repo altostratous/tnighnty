@@ -10,8 +10,18 @@ public class TestFunctionApproximation {
     @Test
     public void TestLUT() {
         LUT lut = new LUT();
-        IRepresentable desiredState = new IRepresentable() {};
-        IRepresentable otherState = new IRepresentable() {};
+        IRepresentable desiredState = new IRepresentable() {
+            @Override
+            public double[] toVector() {
+                return new double[0];
+            }
+        };
+        IRepresentable otherState = new IRepresentable() {
+            @Override
+            public double[] toVector() {
+                return new double[0];
+            }
+        };
         double[] desiredResponse = new double[] {10};
         double[] otherDesiredResponse = new double[] {5};
         lut.train(desiredState, desiredResponse);

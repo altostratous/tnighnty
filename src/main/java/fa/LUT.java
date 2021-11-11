@@ -5,6 +5,7 @@ import representation.State;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class LUT implements IFunctionApproximation {
@@ -21,11 +22,6 @@ public class LUT implements IFunctionApproximation {
 
     public void save(File argFile) {
 
-    }
-
-
-    public double outputFor(double[] X) {
-        return 0;
     }
 
 
@@ -67,11 +63,17 @@ public class LUT implements IFunctionApproximation {
 
     @Override
     public void train(IRepresentable input, double[] output) {
+        double[] repr = input.toVector();
+        for (int i = 0; i < repr.length; i++) {
 
+            System.out.print(repr[i]);
+        }
+        System.out.println(output[0]);
+        this.StateMap.put(input, output);
     }
 
     @Override
     public double[] eval(IRepresentable input) {
-        return new double[]{};
+        return (double[]) StateMap.getOrDefault(input, new double[]{ 0 });
     }
 }

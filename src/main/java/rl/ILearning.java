@@ -4,7 +4,7 @@ import policy.IPolicy;
 import representation.*;
 
 public interface ILearning {
-    IAction takeStep(IState lastStateAction, IState currentState);
+    IAction takeStep(IState lastState, IAction lastAction, IState currentState);
 
     IStateRepresentation getStateRepresentation();
     IActionRepresentation getActionRepresentation();
