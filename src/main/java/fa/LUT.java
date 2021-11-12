@@ -15,13 +15,11 @@ public class LUT implements IFunctionApproximation {
     HashMap StateMap = new HashMap(distance_level * robot_energy_level *
             enemy_energy_level * position_level);
     boolean readOnly;
-    boolean writeOnly;
 
 
-    public LUT(String filePath, boolean readOnly, boolean writeOnly) {
+    public LUT(String filePath, boolean readOnly) {
         this.filePath = filePath;
         this.readOnly = readOnly;
-        this.writeOnly = writeOnly;
     }
 
     public void save(File argFile) {
@@ -87,7 +85,6 @@ public class LUT implements IFunctionApproximation {
 
     @Override
     public void load() throws IOException, ClassNotFoundException {
-        if (this.writeOnly) return;
         this.StateMap = (HashMap) new ObjectInputStream(new FileInputStream(this.filePath)).readObject();
     }
 
