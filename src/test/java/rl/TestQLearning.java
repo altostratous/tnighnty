@@ -12,8 +12,8 @@ import robocode.control.RobotSpecification;
 import robocode.control.events.BattleAdaptor;
 import robocode.control.events.TurnEndedEvent;
 import robocode.control.snapshot.IRobotSnapshot;
-import robot.TopLeftCornerRobot;
 import robot.TrivialLUTRobot;
+import robot.TrivialLUTRobotConfident;
 
 import java.util.ArrayList;
 
@@ -21,9 +21,9 @@ public class TestQLearning {
 
     @Test
     public void TestTrivialLUTRobot() {
-        Robot opponent = new TopLeftCornerRobot();
+        Robot opponent = new TrivialLUTRobot();
         ArrayList<IState> states = new ArrayList<>();
-        TrivialLUTRobot robot = new TrivialLUTRobot();
+        TrivialLUTRobotConfident robot = new TrivialLUTRobotConfident();
         System.setProperty("NOSECURITY", "true");
         RobocodeEngine.setLogMessagesEnabled(false);
         RobocodeEngine engine = new RobocodeEngine(new java.io.File(System.getProperty("user.home") + "/robocode/"));

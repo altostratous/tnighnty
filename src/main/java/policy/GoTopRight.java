@@ -9,6 +9,9 @@ public class GoTopRight implements IPolicy {
         Coordinates coordinates = (Coordinates) run;
         var x = coordinates.getX();
         var y = coordinates.getY();
-        return x * y;
+        if (x == 7 && y == 5) {
+            return 1;
+        }
+        return 0;
     }
 }

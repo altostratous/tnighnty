@@ -11,11 +11,11 @@ public class MoveRepresentation implements IActionRepresentation {
         }
         Move move = (Move) action;
         if (move.getActionType() == Move.ActionType.TURN_LEFT) {
-            qLearningRobot.turnLeft(35);
+            qLearningRobot.turnLeft(90);
         } else if (move.getActionType() == Move.ActionType.TURN_RIGHT) {
-            qLearningRobot.turnRight(35);
+            qLearningRobot.turnRight(90);
         } else if (move.getActionType() == Move.ActionType.AHEAD) {
-            qLearningRobot.ahead(110);
+            qLearningRobot.ahead(100);
         }
     }
 

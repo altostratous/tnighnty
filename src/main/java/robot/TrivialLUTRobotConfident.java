@@ -8,8 +8,8 @@ import representation.*;
 import rl.ILearning;
 import rl.QLearning;
 
-public class TrivialLUTRobot extends QLearningRobot {
-    public TrivialLUTRobot() {
+public class TrivialLUTRobotConfident extends QLearningRobot {
+    public TrivialLUTRobotConfident() {
         super(createLearning());
     }
 
@@ -17,7 +17,7 @@ public class TrivialLUTRobot extends QLearningRobot {
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new MoveRepresentation();
         IStateRepresentation stateRepresentation = new CoordinatesRepresentation();
-        IFunctionApproximation functionApproximation = new LUT("TrivialLURRobot.obj", false);
+        IFunctionApproximation functionApproximation = new LUT("TrivialLURRobot.obj", true);
         IPolicy policy = new GoTopRight();
         return new QLearning(
                 stateRepresentation,
@@ -25,6 +25,6 @@ public class TrivialLUTRobot extends QLearningRobot {
                 new ConcatenationRepresentation(),
                 policy,
                 functionApproximation,
-                0.8, 0.1, 0.8);
+                0.05, 0.1, 0.8);
     }
 }

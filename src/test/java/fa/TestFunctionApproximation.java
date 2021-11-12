@@ -9,7 +9,7 @@ public class TestFunctionApproximation {
     @Ignore
     @Test
     public void TestLUT() {
-        LUT lut = new LUT(null);
+        LUT lut = new LUT(null, true);
         IRepresentable desiredState = new IRepresentable() {
             @Override
             public double[] toVector() {

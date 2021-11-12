@@ -15,7 +15,7 @@ public class CoordinatesRepresentation implements IStateRepresentation {
             StatusEvent statusEvent = (StatusEvent) event;
             coordinates.setX((int) (statusEvent.getStatus().getX() / 100));
             coordinates.setY((int) (statusEvent.getStatus().getY() / 100));
-            coordinates.setHeading((int) (statusEvent.getStatus().getHeading() / 30));
+            coordinates.setHeading((int) ((statusEvent.getStatus().getHeading() + 45) / 90));
         }
         return coordinates;
     }

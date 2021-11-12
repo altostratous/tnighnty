@@ -5,9 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import policy.IPolicy;
 import representation.*;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Optional;
 import java.util.Random;
 
 public class QLearning implements ILearning {
@@ -43,28 +40,31 @@ public class QLearning implements ILearning {
             return explore();
         }
         System.out.println("Current state " + currentState);
-        IAction lastBestAction = exploit(lastState);
+        IAction bestAction = exploit(currentState);
         IRepresentable oldSA = stateActionRepresentation.represent(
                 lastState,
                 lastAction
         );
-        if (!lastState.equals(currentState)) {
-            double oldQ = functionApproximation.eval(oldSA)[0];
-            double r = policy.getReward(lastState);
-            double qMax = functionApproximation.eval(lastBestAction)[0];
-            functionApproximation.train(
-                    oldSA,
-                    new double[]{
-                            oldQ + alpha * (r + gamma * qMax - oldQ)
-                    }
-            );
-        }
+        IRepresentable currentBest = stateActionRepresentation.represent(
+                currentState,
+                bestAction
+        );
+        double oldQ = functionApproximation.eval(oldSA)[0];
+        double r = policy.getReward(lastState);
+        double qMax = functionApproximation.eval(currentBest)[0];
+        System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + qMax  + " - " + oldQ + ")");
+        System.out.println("train " + oldSA + " " + bestAction);
+        functionApproximation.train(
+                oldSA,
+                new double[]{
+                        oldQ + alpha * (r + gamma * qMax - oldQ)
+                }
+        );
         if (this.random.nextDouble() < this.epsilon) {
             IAction action = explore();
             logAction(currentState, action, "explored");
             return action;
         } else {
-            IAction bestAction = exploit(currentState);
             logAction(currentState, bestAction, "exploited");
             return bestAction;
         }

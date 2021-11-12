@@ -1,10 +1,8 @@
 package fa;
 
 import representation.IRepresentable;
-import representation.State;
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class LUT implements IFunctionApproximation {
@@ -16,10 +14,14 @@ public class LUT implements IFunctionApproximation {
     int position_level = 48;
     HashMap StateMap = new HashMap(distance_level * robot_energy_level *
             enemy_energy_level * position_level);
+    boolean readOnly;
+    boolean writeOnly;
 
 
-    public LUT(String filePath) {
+    public LUT(String filePath, boolean readOnly, boolean writeOnly) {
         this.filePath = filePath;
+        this.readOnly = readOnly;
+        this.writeOnly = writeOnly;
     }
 
     public void save(File argFile) {
@@ -65,6 +67,7 @@ public class LUT implements IFunctionApproximation {
 
     @Override
     public void train(IRepresentable input, double[] output) {
+        if (readOnly) {return;}
         double[] repr = input.toVector();
         System.out.print("train " + input + " to " + output[0]);
         System.out.println();
@@ -78,11 +81,13 @@ public class LUT implements IFunctionApproximation {
 
     @Override
     public void save() throws IOException {
+        if (readOnly) return;
         new ObjectOutputStream(new FileOutputStream(this.filePath)).writeObject(StateMap);
     }
 
     @Override
     public void load() throws IOException, ClassNotFoundException {
+        if (this.writeOnly) return;
         this.StateMap = (HashMap) new ObjectInputStream(new FileInputStream(this.filePath)).readObject();
     }
 

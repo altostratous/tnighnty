@@ -18,6 +18,7 @@ public class QLearningRobot extends Robot {
     private IState state;
     private IState lastState;
     private IAction lastAction;
+    private long lastTurn;
 
     @Override
     public void run() {
@@ -61,10 +62,13 @@ public class QLearningRobot extends Robot {
     }
 
     private void processEvent(Event event) {
-        IState newState = learning.getStateRepresentation().represent(getState(), event);
-        setState(newState);
-        IAction action = learning.takeStep(getLastState(), getLastAction(), getState());
-        takeAction(action);
+        if (event.getTime() > this.lastTurn) {
+            this.lastTurn = this.getTime();
+            IState newState = learning.getStateRepresentation().represent(getState(), event);
+            setState(newState);
+            IAction action = learning.takeStep(getLastState(), getLastAction(), getState());
+            takeAction(action);
+        }
     }
 
     private IAction getLastAction() {
@@ -77,10 +81,8 @@ public class QLearningRobot extends Robot {
     }
 
     public void setState(IState state) {
-        if (!state.equals(this.lastState)) {
-            this.lastState = this.state;
-            this.state = state;
-        }
+        this.lastState = this.state;
+        this.state = state;
     }
 
     @Override
