@@ -2,6 +2,7 @@ package robot;
 
 import fa.IFunctionApproximation;
 import fa.LUT;
+import policy.EnergyReward;
 import policy.GoTopRight;
 import policy.IPolicy;
 import representation.*;
@@ -16,9 +17,9 @@ public class TrivialLUTRobot extends QLearningRobot {
 
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new MoveRepresentation();
-        IStateRepresentation stateRepresentation = new CoordinatesRepresentation();
-        IFunctionApproximation functionApproximation = new LUT("TrivialLURRobot.obj", false);
-        IPolicy policy = new GoTopRight();
+        IStateRepresentation stateRepresentation = new StateRep();
+        IFunctionApproximation functionApproximation = new LUT("TrivialLUTRobot.obj", false);
+        IPolicy policy = new EnergyReward();
         return new QLearning(
                 stateRepresentation,
                 actionRepresentation,

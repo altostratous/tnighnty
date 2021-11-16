@@ -3,14 +3,13 @@ package robot;
 import fa.IFunctionApproximation;
 import fa.LUT;
 import policy.EnergyReward;
-import policy.GoTopRight;
 import policy.IPolicy;
 import representation.*;
 import rl.ILearning;
 import rl.QLearning;
 
-public class TrivialLUTRobotConfident extends QLearningRobot {
-    public TrivialLUTRobotConfident() {
+public class TrivialLUTRobotConfident_crazy extends QLearningRobot {
+    public TrivialLUTRobotConfident_crazy() {
         super(createLearning());
     }
 

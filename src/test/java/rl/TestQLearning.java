@@ -23,7 +23,7 @@ public class TestQLearning {
 
     @Test
     public void TestTrivialLUTRobot() {
-        new File("TrivialLURRobot.obj").deleteOnExit();
+        new File("TrivialLUTRobot.obj").deleteOnExit();
         Robot opponent = new TrivialLUTRobot();
         ArrayList<IState> states = new ArrayList<>();
         TrivialLUTRobotConfident robot = new TrivialLUTRobotConfident();
