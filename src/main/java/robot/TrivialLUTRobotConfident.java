@@ -17,9 +17,9 @@ public class TrivialLUTRobotConfident extends QLearningRobot {
 
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new MoveRepresentation();
-        IStateRepresentation stateRepresentation = new StateRep();
-        IFunctionApproximation functionApproximation = new LUT("TrivialLUTRobot.obj", false);
-        IPolicy policy = new EnergyReward();
+        IStateRepresentation stateRepresentation = new CoordinatesRepresentation();
+        IFunctionApproximation functionApproximation = new LUT("TrivialLUTRobot.obj", true);
+        IPolicy policy = new GoTopRight();
         return new QLearning(
                 stateRepresentation,
                 actionRepresentation,

@@ -23,7 +23,16 @@ public class QLearningRobot extends Robot {
     @Override
     public void run() {
         super.run();
-        ahead(5);
+//        setAdjustGunForRobotTurn(true);
+//        setAdjustRadarForGunTurn(true);
+        while (true) {
+            // Replace the next 4 lines with any behavior you would like
+//            ahead(100);
+//            turnGunRight(360);
+//            back(100);
+//            turnRadarLeft(360);
+            turnGunRight(360);
+        }
     }
 
     public QLearningRobot(ILearning learning) {
@@ -41,11 +50,6 @@ public class QLearningRobot extends Robot {
         return learning;
     }
 
-    @Override
-    public void onStatus(StatusEvent e) {
-        super.onStatus(e);
-        processEvent(e);
-    }
 
     private IState getLastState() {
         return lastState;

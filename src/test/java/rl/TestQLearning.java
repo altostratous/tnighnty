@@ -1,5 +1,6 @@
 package rl;
 
+import org.junit.Ignore;
 import policy.IPolicy;
 import representation.*;
 import org.junit.Assert;
@@ -21,6 +22,7 @@ import java.util.ArrayList;
 
 public class TestQLearning {
 
+    @Ignore("Focus on testing TNinety")
     @Test
     public void TestTrivialLUTRobot() {
         new File("TrivialLUTRobot.obj").deleteOnExit();

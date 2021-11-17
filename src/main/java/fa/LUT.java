@@ -79,13 +79,13 @@ public class LUT implements IFunctionApproximation {
 
     @Override
     public void save() throws IOException {
-//        if (readOnly) return;
-//        new ObjectOutputStream(new FileOutputStream(this.filePath)).writeObject(StateMap);
+        if (readOnly) return;
+        new ObjectOutputStream(new FileOutputStream(this.filePath)).writeObject(StateMap);
     }
 
     @Override
     public void load() throws IOException, ClassNotFoundException {
-//        this.StateMap = (HashMap) new ObjectInputStream(new FileInputStream(this.filePath)).readObject();
+        this.StateMap = (HashMap) new ObjectInputStream(new FileInputStream(this.filePath)).readObject();
     }
 
 
