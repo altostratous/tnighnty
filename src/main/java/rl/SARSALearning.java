@@ -7,7 +7,7 @@ import representation.*;
 
 import java.util.Random;
 
-public class QLearning implements ILearning {
+public class SARSALearning implements ILearning {
 
     private double epsilon;
     private final double alpha;
@@ -19,10 +19,10 @@ public class QLearning implements ILearning {
     private IFunctionApproximation functionApproximation;
     private IStateActionRepresentation stateActionRepresentation;
 
-    public QLearning(IStateRepresentation stateRepresentation,
-                     IActionRepresentation actionRepresentation,
-                     IStateActionRepresentation stateActionRepresentation,
-                     IPolicy policy, IFunctionApproximation functionApproximation, double epsilon, double alpha, double gamma) {
+    public SARSALearning(IStateRepresentation stateRepresentation,
+                         IActionRepresentation actionRepresentation,
+                         IStateActionRepresentation stateActionRepresentation,
+                         IPolicy policy, IFunctionApproximation functionApproximation, double epsilon, double alpha, double gamma) {
         this.stateActionRepresentation = stateActionRepresentation;
         this.stateRepresentation = stateRepresentation;
         this.actionRepresentation = actionRepresentation;
@@ -37,34 +37,43 @@ public class QLearning implements ILearning {
     @Override
     public IAction takeStep(IState lastState, IAction lastAction, IState currentState) {
         if (lastState == null || lastAction == null || currentState == null) {
-            return explore();
-        }
+            return explore();}
         System.out.println("Current state " + currentState);
-        IAction bestAction = exploit(currentState);
         IRepresentable oldSA = stateActionRepresentation.represent(
                 lastState,
-                lastAction
-        );
-        IRepresentable currentBest = stateActionRepresentation.represent(
-                currentState,
-                bestAction
-        );
+                lastAction);
         double oldQ = functionApproximation.eval(oldSA)[0];
         double r = policy.getReward(lastState); // why would evaluate Rewards for last state?
-        double qMax = functionApproximation.eval(currentBest)[0];
-        System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + qMax  + " - " + oldQ + ")");
-        System.out.println("train " + oldSA + " " + bestAction);
-        functionApproximation.train(
-                oldSA,
-                new double[]{
-                        oldQ + alpha * (r + gamma * qMax - oldQ)
-                }
-        );
+        double newQ;
+
         if (this.random.nextDouble() < this.epsilon) {
             IAction action = explore();
+            IRepresentable exploreSA = stateActionRepresentation.represent(
+                    currentState,
+                    action);
+            newQ = functionApproximation.eval(exploreSA)[0];
+            System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + newQ  + " - " + oldQ + ")");
+            System.out.println("train " + oldSA + " " + action);
+            functionApproximation.train(
+                    oldSA,
+                    new double[]{
+                            oldQ + alpha * (r + gamma * newQ - oldQ)
+                    });
             logAction(currentState, action, "explored");
             return action;
         } else {
+            IAction bestAction = exploit(currentState);
+            IRepresentable currentBest = stateActionRepresentation.represent(
+                    currentState,
+                    bestAction);
+            newQ = functionApproximation.eval(currentBest)[0];
+            System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + newQ  + " - " + oldQ + ")");
+            System.out.println("train " + oldSA + " " + bestAction);
+            functionApproximation.train(
+                    oldSA,
+                    new double[]{
+                            oldQ + alpha * (r + gamma * newQ - oldQ)
+                    });
             logAction(currentState, bestAction, "exploited");
             return bestAction;
         }
