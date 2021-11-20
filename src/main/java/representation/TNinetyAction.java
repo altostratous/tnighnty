@@ -38,6 +38,7 @@ public class TNinetyAction implements IAction, Serializable {
         TURN_LEFT,
         AHEAD,
         FIRE,
+        RANDOMLY_MOVE,
     }
 
     ActionType actionType;

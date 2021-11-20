@@ -5,7 +5,7 @@ import representation.IState;
 
 public class GoTopRight implements IPolicy {
     @Override
-    public double getReward(IState run) {
+    public double getReward(IState run, IState dummy) {
         Coordinates coordinates = (Coordinates) run;
         var x = coordinates.getX();
         var y = coordinates.getY();

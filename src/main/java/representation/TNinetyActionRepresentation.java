@@ -2,6 +2,8 @@ package representation;
 
 import robocode.Robot;
 
+import java.util.Random;
+
 public class TNinetyActionRepresentation implements IActionRepresentation {
     @Override
     public void takeAction(Robot qLearningRobot, IAction action) {
@@ -18,16 +20,21 @@ public class TNinetyActionRepresentation implements IActionRepresentation {
             qLearningRobot.ahead(100);
         } else if (move.getActionType() == TNinetyAction.ActionType.FIRE) {
             qLearningRobot.fire(1);
+        } else if (move.getActionType() == TNinetyAction.ActionType.RANDOMLY_MOVE) {
+            MoveRepresentation moveRepresentation = new MoveRepresentation();
+            System.out.println("TAKING RANDOM");
+            moveRepresentation.takeAction(qLearningRobot, moveRepresentation.getActions()[new Random().nextInt(3)]);
         }
     }
 
     @Override
     public IAction[] getActions() {
         return new IAction[] {
-            new TNinetyAction(TNinetyAction.ActionType.AHEAD),
-            new TNinetyAction(TNinetyAction.ActionType.TURN_LEFT),
-            new TNinetyAction(TNinetyAction.ActionType.TURN_RIGHT),
+//            new TNinetyAction(TNinetyAction.ActionType.AHEAD),
+//            new TNinetyAction(TNinetyAction.ActionType.TURN_LEFT),
+//            new TNinetyAction(TNinetyAction.ActionType.TURN_RIGHT),
             new TNinetyAction(TNinetyAction.ActionType.FIRE),
+            new TNinetyAction(TNinetyAction.ActionType.RANDOMLY_MOVE),
         };
     }
 }

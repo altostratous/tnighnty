@@ -43,7 +43,7 @@ public class SARSALearning implements ILearning {
                 lastState,
                 lastAction);
         double oldQ = functionApproximation.eval(oldSA)[0];
-        double r = policy.getReward(lastState); // why would evaluate Rewards for last state?
+        double r = policy.getReward(currentState, lastState); // why would evaluate Rewards for last state?
         double newQ;
 
         if (this.random.nextDouble() < this.epsilon) {

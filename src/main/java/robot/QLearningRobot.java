@@ -3,14 +3,8 @@ package robot;
 import representation.IAction;
 import representation.IState;
 import rl.ILearning;
-import rl.QLearning;
 import robocode.*;
-import robocode.Event;
-import robocode.Robot;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class QLearningRobot extends Robot {
@@ -67,13 +61,15 @@ public class QLearningRobot extends Robot {
 
     private void processEvent(Event event) {
         if (event.getTime() > this.lastTurn) {
-            this.lastTurn = this.getTime();
             IState newState = learning.getStateRepresentation().represent(getState(), event);
             //set current state
             setState(newState);
             IAction action = learning.takeStep(getLastState(), getLastAction(), getState());
             //take new action
-            takeAction(action);
+            if (event instanceof ScannedRobotEvent) {
+                this.lastTurn = this.getTime();
+                takeAction(action);
+            }
         }
     }
 
@@ -98,5 +94,10 @@ public class QLearningRobot extends Robot {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onStatus(StatusEvent e) {
+        processEvent(e);
     }
 }

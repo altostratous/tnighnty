@@ -50,7 +50,7 @@ public class QLearning implements ILearning {
                 bestAction
         );
         double oldQ = functionApproximation.eval(oldSA)[0];
-        double r = policy.getReward(lastState); // why would evaluate Rewards for last state?
+        double r = policy.getReward(currentState, lastState); // why would evaluate Rewards for last state?
         double qMax = functionApproximation.eval(currentBest)[0];
         System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + qMax  + " - " + oldQ + ")");
         System.out.println("train " + oldSA + " " + bestAction);

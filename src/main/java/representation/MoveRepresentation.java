@@ -10,6 +10,7 @@ public class MoveRepresentation implements IActionRepresentation {
             throw new IllegalArgumentException("Move representation can only take move actions.");
         }
         Move move = (Move) action;
+        System.out.println("CASTED");
         if (move.getActionType() == Move.ActionType.TURN_LEFT) {
             qLearningRobot.turnLeft(90);
         } else if (move.getActionType() == Move.ActionType.TURN_RIGHT) {

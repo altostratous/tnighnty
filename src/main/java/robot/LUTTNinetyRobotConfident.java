@@ -3,15 +3,14 @@ package robot;
 import fa.IFunctionApproximation;
 import fa.LUT;
 import policy.EnergyReward;
-import policy.GoTopRight;
 import policy.IPolicy;
 import representation.*;
 import rl.ILearning;
 import rl.QLearning;
 import robocode.ScannedRobotEvent;
 
-public class LUTTNinetyRobot extends QLearningRobot {
-    public LUTTNinetyRobot() {
+public class LUTTNinetyRobotConfident extends QLearningRobot {
+    public LUTTNinetyRobotConfident() {
         super(createLearning());
     }
 
@@ -19,7 +18,7 @@ public class LUTTNinetyRobot extends QLearningRobot {
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new TNinetyActionRepresentation();
         IStateRepresentation stateRepresentation = new StateRep();
-        IFunctionApproximation functionApproximation = new LUT("LUTTNinetyRobot.obj", false);
+        IFunctionApproximation functionApproximation = new LUT("LUTTNinetyRobot.obj", true);
         IPolicy policy = new EnergyReward();
         return new QLearning(
                 stateRepresentation,
@@ -27,7 +26,7 @@ public class LUTTNinetyRobot extends QLearningRobot {
                 new ConcatenationRepresentation(),
                 policy,
                 functionApproximation,
-                0.4, 0.1, 0.8);
+                0.05, 0.1, 0.8);
     }
 
     @Override
