@@ -3,17 +3,17 @@ package representation;
 import java.io.Serializable;
 
 public class Concatenation implements IRepresentable, Serializable {
-    private IState state;
-    private IAction action;
+    private IRepresentable first;
+    private IRepresentable second;
 
-    public Concatenation(IState state, IAction action) {
-        this.state = state;
-        this.action = action;
+    public Concatenation(IRepresentable state, IRepresentable action) {
+        this.first = state;
+        this.second = action;
     }
     @Override
     public double[] toVector() {
-        double[] stateVector = state.toVector();
-        double[] actionVector = state.toVector();
+        double[] stateVector = first.toVector();
+        double[] actionVector = second.toVector();
         double[] result = new double[stateVector.length + actionVector.length];
         System.arraycopy(stateVector, 0, result, 0, stateVector.length);
         System.arraycopy(actionVector, 0, result, stateVector.length, actionVector.length);
@@ -22,7 +22,7 @@ public class Concatenation implements IRepresentable, Serializable {
 
     @Override
     public int hashCode() {
-        return state.hashCode() + action.hashCode();
+        return first.hashCode() + second.hashCode();
     }
 
     @Override
@@ -40,8 +40,8 @@ public class Concatenation implements IRepresentable, Serializable {
     @Override
     public String toString() {
         return "Concatenation{" +
-                "state=" + state +
-                ", action=" + action +
+                "first=" + first +
+                ", second=" + second +
                 '}';
     }
 }

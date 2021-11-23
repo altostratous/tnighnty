@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import policy.IPolicy;
 import representation.*;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class QLearning implements ILearning {
@@ -18,6 +19,9 @@ public class QLearning implements ILearning {
     private IPolicy policy;
     private IFunctionApproximation functionApproximation;
     private IStateActionRepresentation stateActionRepresentation;
+    private int depth;
+    private ArrayList<IRepresentable> history = new ArrayList<>();
+    private ConcatenationRepresentation concatenation = new ConcatenationRepresentation();
 
     public QLearning(IStateRepresentation stateRepresentation,
                      IActionRepresentation actionRepresentation,
@@ -32,6 +36,24 @@ public class QLearning implements ILearning {
         this.gamma = gamma;
         this.random = new Random();
         this.functionApproximation = functionApproximation;
+        this.depth = 1;
+    }
+
+
+    public QLearning(IStateRepresentation stateRepresentation,
+                     IActionRepresentation actionRepresentation,
+                     IStateActionRepresentation stateActionRepresentation,
+                     IPolicy policy, IFunctionApproximation functionApproximation,
+                     double epsilon, double alpha, double gamma, int depth) {        this.epsilon = epsilon;
+        this.alpha = alpha;
+        this.gamma = gamma;
+        this.stateRepresentation = stateRepresentation;
+        this.actionRepresentation = actionRepresentation;
+        this.policy = policy;
+        this.functionApproximation = functionApproximation;
+        this.stateActionRepresentation = stateActionRepresentation;
+        this.depth = depth;
+        this.random = new Random();
     }
 
     @Override
@@ -40,15 +62,23 @@ public class QLearning implements ILearning {
             return explore();
         }
         System.out.println("Current state " + currentState);
-        IAction bestAction = exploit(currentState);
         IRepresentable oldSA = stateActionRepresentation.represent(
                 lastState,
                 lastAction
         );
-        IRepresentable currentBest = stateActionRepresentation.represent(
-                currentState,
-                bestAction
-        );
+        history.add(oldSA);
+        while (history.size() > depth) {
+            history.remove(0);
+        }
+        if (history.size() < depth) return explore();
+        IAction bestAction = exploit(currentState);
+        for (int i = 0; i < history.size() - 1; i++) {
+            oldSA = new Concatenation(oldSA, history.get(i));
+        }
+        IRepresentable currentBest = stateActionRepresentation.represent(currentState, bestAction);
+        for (int i = 1; i < history.size(); i++) {
+            currentBest = new Concatenation(currentBest, history.get(i));
+        }
         double oldQ = functionApproximation.eval(oldSA)[0];
         double r = policy.getReward(currentState, lastState); // why would evaluate Rewards for last state?
         double qMax = functionApproximation.eval(currentBest)[0];
@@ -72,13 +102,21 @@ public class QLearning implements ILearning {
 
     private IAction exploit(IState currentState) {
         IAction bestAction = actionRepresentation.getActions()[0];
-        double bestQ = functionApproximation.eval(stateActionRepresentation.represent(currentState, bestAction))[0];
+        IRepresentable stateAction = stateActionRepresentation.represent(currentState, bestAction);
+        for (int i = 1; i < history.size(); i++) {
+            stateAction = new Concatenation(stateAction, history.get(i));
+        }
+        double bestQ = functionApproximation.eval(stateAction)[0];
 
         for (IAction action: actionRepresentation.getActions()) {
+            stateAction = stateActionRepresentation.represent(
+                    currentState, action
+            );
+            for (int i = 1; i < history.size(); i++) {
+                stateAction = new Concatenation(stateAction, history.get(i));
+            }
             double q = functionApproximation.eval(
-                    stateActionRepresentation.represent(
-                            currentState, action
-                    ))[0];
+                    stateAction)[0];
             System.out.print("    " + q + " " + action);
             System.out.println();
             if (q > bestQ) {

@@ -33,24 +33,24 @@ public class TestTNinetyRobot {
             public void onBattleCompleted(BattleCompletedEvent event) {
                 super.onBattleCompleted(event);
                 for (var result :
-                        event.getSortedResults()) {
-                    System.out.print(result.getFirsts() + " ");
+                        event.getIndexedResults()) {
+                    System.out.print(result.getTeamLeaderName() + " " +  result.getFirsts() + " ");
                 }
                 System.out.println(((LUT)(new LUTTNinetyRobot().getLearning().getFunctionApproximation())).getSize());
             }
         });
-        for (int i = 0; i < 1000; i++) {
-            int numberOfRounds = 500;
+        for (int i = 0; i < 50; i++) {
+            int numberOfRounds = 100;
 //            int numberOfRounds = 10;
             BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
             Robot robot;
             if (i % 2 == 0) {
 //            if (true) {
-                engine.setVisible(true);
+                engine.setVisible(false);
                 robot = trainRobot;
             } else {
-                numberOfRounds = 500;
-                engine.setVisible(true);
+                numberOfRounds = 100;
+                engine.setVisible(false);
                 robot = testRobot;
             }
             RobotSpecification[] selectedRobots = engine.getLocalRepository(robot.getClass().getCanonicalName() + "*," + opponent.getClass().getCanonicalName() + "*");
