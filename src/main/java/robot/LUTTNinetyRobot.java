@@ -18,7 +18,7 @@ public class LUTTNinetyRobot extends QLearningRobot {
 
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new TNinetyActionRepresentation();
-        IStateRepresentation stateRepresentation = new StateRep();
+        IStateRepresentation stateRepresentation = new MementoStateRepresentation(new StateRep());
         IFunctionApproximation functionApproximation = new LUT("LUTTNinetyRobot.obj", false);
         IPolicy policy = new EnergyReward();
         return new QLearning(
