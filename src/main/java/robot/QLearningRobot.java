@@ -13,6 +13,8 @@ public class QLearningRobot extends Robot {
     private IState lastState;
     private IAction lastAction;
     private long lastTurn;
+    private int turn = 0;
+    private StatusEvent lastStatusEvent;
 
     @Override
     public void run() {
@@ -26,7 +28,12 @@ public class QLearningRobot extends Robot {
 //            back(100);
 //            turnRadarLeft(360);
             turnGunRight(360);
+            turn ++;
         }
+    }
+
+    public int getTurn() {
+        return turn;
     }
 
     public QLearningRobot(ILearning learning) {
@@ -60,16 +67,16 @@ public class QLearningRobot extends Robot {
     }
 
     private void processEvent(Event event) {
-        if (event.getTime() > this.lastTurn) {
-            IState newState = learning.getStateRepresentation().represent(getState(), event);
+        if (event instanceof ScannedRobotEvent && this.getTurn() > this.lastTurn) {
+            IState newState = learning.getStateRepresentation().represent(getState(), lastStatusEvent);
+            newState = learning.getStateRepresentation().represent(newState, event);
             //set current state
             setState(newState);
             IAction action = learning.takeStep(getLastState(), getLastAction(), getState());
             //take new action
-            if (event instanceof ScannedRobotEvent) {
-                this.lastTurn = this.getTime();
-                takeAction(action);
-            }
+            this.lastTurn = this.getTurn();
+            System.out.println("Turn " + this.lastTurn);
+            takeAction(action);
         }
     }
 
@@ -98,6 +105,6 @@ public class QLearningRobot extends Robot {
 
     @Override
     public void onStatus(StatusEvent e) {
-        processEvent(e);
+        lastStatusEvent = e;
     }
 }

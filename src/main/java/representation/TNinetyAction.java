@@ -18,7 +18,7 @@ public class TNinetyAction implements IAction, Serializable {
                 value = 3;
                 break;
             case FIRE:
-                value = 3;
+                value = 4;
                 break;
             default:
                 assert false;

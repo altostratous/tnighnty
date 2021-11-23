@@ -1,5 +1,6 @@
 package robot;
 
+import fa.LUT;
 import org.junit.Test;
 import representation.IState;
 import robocode.Robot;
@@ -18,11 +19,12 @@ public class TestTNinetyRobot {
 
     @Test
     public void TestTrivialLUTRobot() {
-//        new File("LUTTNinetyRobot.obj").deleteOnExit();
+        new File("LUTTNinetyRobot.obj").deleteOnExit();
         ArrayList<IState> states = new ArrayList<>();
         LUTTNinetyRobot trainRobot = new LUTTNinetyRobot();
         LUTTNinetyRobotConfident testRobot = new LUTTNinetyRobotConfident();
         Corners opponent = new Corners();
+//        Tracker opponent = new Tracker();
         System.setProperty("NOSECURITY", "true");
         RobocodeEngine.setLogMessagesEnabled(false);
         RobocodeEngine engine = new RobocodeEngine(new File(System.getProperty("user.home") + "/robocode/"));
@@ -32,20 +34,23 @@ public class TestTNinetyRobot {
                 super.onBattleCompleted(event);
                 for (var result :
                         event.getSortedResults()) {
-                    System.out.println(result.getFirsts());
+                    System.out.print(result.getFirsts() + " ");
                 }
+                System.out.println(((LUT)(new LUTTNinetyRobot().getLearning().getFunctionApproximation())).getSize());
             }
         });
-        for (int i = 0; i < 100; i++) {
-            int numberOfRounds = 200;
+        for (int i = 0; i < 1000; i++) {
+            int numberOfRounds = 500;
+//            int numberOfRounds = 10;
             BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
             Robot robot;
             if (i % 2 == 0) {
-                engine.setVisible(false);
+//            if (true) {
+                engine.setVisible(true);
                 robot = trainRobot;
             } else {
-                numberOfRounds = 100;
-                engine.setVisible(false);
+                numberOfRounds = 500;
+                engine.setVisible(true);
                 robot = testRobot;
             }
             RobotSpecification[] selectedRobots = engine.getLocalRepository(robot.getClass().getCanonicalName() + "*," + opponent.getClass().getCanonicalName() + "*");

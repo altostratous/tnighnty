@@ -9,6 +9,8 @@ public class EnergyReward implements IPolicy {
         // should we give rewards on one state or on the change of last two states?
         States states = (States) run;
         States lastStates = (States) last;
-        return - states.getEnemyEnergy();
+//        return states.getMyEnergy() - states.getEnemyEnergy();
+
+        return lastStates.getEnemyEnergy() - states.getEnemyEnergy();
     }
 }

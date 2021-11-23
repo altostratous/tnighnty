@@ -1,5 +1,6 @@
 package representation;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 public class States implements IState{
@@ -56,7 +57,16 @@ public class States implements IState{
 
     @Override
     public double[] toVector() {
-        return new double[0];
+        return new double[]{
+//                this.x / 100,
+//                this.y / 100,
+//                (this.heading + 45) / 90,
+//                (this.bearing + 45) / 90,
+//                this.myEnergy / 40,
+//                this.enemyEnergy / 40,
+//                this.distance / 200,
+                0
+        };
     }
 
     public int getDistance() {
@@ -88,12 +98,19 @@ public class States implements IState{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         States states = (States) o;
-        return distance == states.distance && myEnergy == states.myEnergy && enemyEnergy == states.enemyEnergy;
+        double[] mine = toVector();
+        double[] theirs = states.toVector();
+        for (int i = 0; i < mine.length; i++) {
+            if (mine[i] != theirs[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(distance, myEnergy, enemyEnergy);
+        return Arrays.hashCode(toVector());
     }
 
     @Override

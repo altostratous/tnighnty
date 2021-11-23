@@ -71,8 +71,9 @@ public class QLearning implements ILearning {
     }
 
     private IAction exploit(IState currentState) {
-        double bestQ = 0;
         IAction bestAction = actionRepresentation.getActions()[0];
+        double bestQ = functionApproximation.eval(stateActionRepresentation.represent(currentState, bestAction))[0];
+
         for (IAction action: actionRepresentation.getActions()) {
             double q = functionApproximation.eval(
                     stateActionRepresentation.represent(

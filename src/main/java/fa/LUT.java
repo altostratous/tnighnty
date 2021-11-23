@@ -88,5 +88,7 @@ public class LUT implements IFunctionApproximation {
         this.StateMap = (HashMap) new ObjectInputStream(new FileInputStream(this.filePath)).readObject();
     }
 
-
+    public int getSize() {
+        return this.StateMap.size();
+    }
 }

@@ -19,7 +19,7 @@ public class TNinetyActionRepresentation implements IActionRepresentation {
         } else if (move.getActionType() == TNinetyAction.ActionType.AHEAD) {
             qLearningRobot.ahead(100);
         } else if (move.getActionType() == TNinetyAction.ActionType.FIRE) {
-            qLearningRobot.fire(1);
+            qLearningRobot.fire(18);
         } else if (move.getActionType() == TNinetyAction.ActionType.RANDOMLY_MOVE) {
             MoveRepresentation moveRepresentation = new MoveRepresentation();
             System.out.println("TAKING RANDOM");
@@ -30,11 +30,11 @@ public class TNinetyActionRepresentation implements IActionRepresentation {
     @Override
     public IAction[] getActions() {
         return new IAction[] {
-//            new TNinetyAction(TNinetyAction.ActionType.AHEAD),
-//            new TNinetyAction(TNinetyAction.ActionType.TURN_LEFT),
-//            new TNinetyAction(TNinetyAction.ActionType.TURN_RIGHT),
+            new TNinetyAction(TNinetyAction.ActionType.AHEAD),
+            new TNinetyAction(TNinetyAction.ActionType.TURN_LEFT),
+            new TNinetyAction(TNinetyAction.ActionType.TURN_RIGHT),
             new TNinetyAction(TNinetyAction.ActionType.FIRE),
-            new TNinetyAction(TNinetyAction.ActionType.RANDOMLY_MOVE),
+//            new TNinetyAction(TNinetyAction.ActionType.RANDOMLY_MOVE),
         };
     }
 }

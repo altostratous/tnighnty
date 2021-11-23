@@ -17,15 +17,15 @@ public class StateRep implements IStateRepresentation {
 
         if (event instanceof ScannedRobotEvent) {
             ScannedRobotEvent scannedEvent = (ScannedRobotEvent) event;
-            states.setDistance((int) (scannedEvent.getDistance()) / 100);
+            states.setDistance((int) (scannedEvent.getDistance()));
             states.setEnemyEnergy((int) scannedEvent.getEnergy());
-            states.setBearing((int)((scannedEvent.getBearing() + 45) / 90));
+            states.setBearing((int)scannedEvent.getBearing());
         }
         if (event instanceof StatusEvent) {
             StatusEvent statusEvent = (StatusEvent) event;
-            states.setX((int) (statusEvent.getStatus().getX() / 100));
-            states.setY((int) (statusEvent.getStatus().getY() / 100));
-            states.setHeading((int) ((statusEvent.getStatus().getHeading() + 45) / 90));
+            states.setX((int) statusEvent.getStatus().getX());
+            states.setY((int) statusEvent.getStatus().getY());
+            states.setHeading((int) statusEvent.getStatus().getHeading());
             states.setMyEnergy((int) statusEvent.getStatus().getEnergy());
         }
         return states;
