@@ -40,7 +40,7 @@ public class TestTNinetyRobot {
             }
         });
         for (int i = 0; i < 50; i++) {
-            int numberOfRounds = 100;
+            int numberOfRounds = 10;
 //            int numberOfRounds = 10;
             BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
             Robot robot;
