@@ -32,7 +32,7 @@ public class TNinetyActionRepresentation implements IActionRepresentation {
         return new IAction[] {
             new TNinetyAction(TNinetyAction.ActionType.AHEAD),
             new TNinetyAction(TNinetyAction.ActionType.TURN_LEFT),
-            new TNinetyAction(TNinetyAction.ActionType.TURN_RIGHT),
+//            new TNinetyAction(TNinetyAction.ActionType.TURN_RIGHT),
             new TNinetyAction(TNinetyAction.ActionType.FIRE),
 //            new TNinetyAction(TNinetyAction.ActionType.RANDOMLY_MOVE),
         };

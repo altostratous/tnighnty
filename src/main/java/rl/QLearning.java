@@ -20,6 +20,7 @@ public class QLearning implements ILearning {
     private IFunctionApproximation functionApproximation;
     private IStateActionRepresentation stateActionRepresentation;
     private int depth;
+    private boolean onlineLearning = false;
     private ArrayList<IRepresentable> history = new ArrayList<>();
     private ConcatenationRepresentation concatenation = new ConcatenationRepresentation();
 
@@ -37,6 +38,7 @@ public class QLearning implements ILearning {
         this.random = new Random();
         this.functionApproximation = functionApproximation;
         this.depth = 1;
+        this.onlineLearning = false;
     }
 
 
@@ -44,7 +46,7 @@ public class QLearning implements ILearning {
                      IActionRepresentation actionRepresentation,
                      IStateActionRepresentation stateActionRepresentation,
                      IPolicy policy, IFunctionApproximation functionApproximation,
-                     double epsilon, double alpha, double gamma, int depth) {        this.epsilon = epsilon;
+                     double epsilon, double alpha, double gamma, int depth, boolean onlineLearning) {        this.epsilon = epsilon;
         this.alpha = alpha;
         this.gamma = gamma;
         this.stateRepresentation = stateRepresentation;
@@ -54,6 +56,7 @@ public class QLearning implements ILearning {
         this.stateActionRepresentation = stateActionRepresentation;
         this.depth = depth;
         this.random = new Random();
+        this.onlineLearning = onlineLearning;
     }
 
     @Override
@@ -72,32 +75,40 @@ public class QLearning implements ILearning {
         }
         if (history.size() < depth) return explore();
         IAction bestAction = exploit(currentState);
-        for (int i = 0; i < history.size() - 1; i++) {
-            oldSA = new Concatenation(oldSA, history.get(i));
-        }
-        IRepresentable currentBest = stateActionRepresentation.represent(currentState, bestAction);
-        for (int i = 1; i < history.size(); i++) {
-            currentBest = new Concatenation(currentBest, history.get(i));
-        }
-        double oldQ = functionApproximation.eval(oldSA)[0];
-        double r = policy.getReward(currentState, lastState); // why would evaluate Rewards for last state?
-        double qMax = functionApproximation.eval(currentBest)[0];
-        System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + qMax  + " - " + oldQ + ")");
-        System.out.println("train " + oldSA + " " + bestAction);
-        functionApproximation.train(
-                oldSA,
-                new double[]{
-                        oldQ + alpha * (r + gamma * qMax - oldQ)
-                }
-        );
+        IAction toTakeAction;
         if (this.random.nextDouble() < this.epsilon) {
             IAction action = explore();
             logAction(currentState, action, "explored");
-            return action;
+            toTakeAction = action;
         } else {
             logAction(currentState, bestAction, "exploited");
-            return bestAction;
+            toTakeAction = bestAction;
         }
+        if (!onlineLearning) {
+            toTakeAction = bestAction;
+        }
+
+        for (int i = 0; i < history.size() - 1; i++) {
+            oldSA = new Concatenation(oldSA, history.get(i));
+        }
+        IRepresentable currentAction = stateActionRepresentation.represent(currentState, toTakeAction);
+        for (int i = 1; i < history.size(); i++) {
+            currentAction = new Concatenation(currentAction, history.get(i));
+        }
+        double oldQ = functionApproximation.eval(oldSA)[0];
+        double r = policy.getReward(currentState, lastState); // why would evaluate Rewards for last state?
+
+
+        double currentQ = functionApproximation.eval(currentAction)[0];
+        System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + currentQ  + " - " + oldQ + ")");
+        System.out.println("train " + oldSA + " " + toTakeAction);
+        functionApproximation.train(
+                oldSA,
+                new double[]{
+                        oldQ + alpha * (r + gamma * currentQ - oldQ)
+                }
+        );
+        return toTakeAction;
     }
 
     private IAction exploit(IState currentState) {

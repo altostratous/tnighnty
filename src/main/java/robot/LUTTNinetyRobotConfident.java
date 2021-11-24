@@ -26,7 +26,7 @@ public class LUTTNinetyRobotConfident extends QLearningRobot {
                 new ConcatenationRepresentation(),
                 policy,
                 functionApproximation,
-                0.05, 0.1, 0.8, 3);
+                0.05, 0.1, 0.8, 3, false);
     }
 
     @Override
