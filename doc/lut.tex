@@ -73,11 +73,21 @@
 
 \maketitle
 
+\section{Team Members}
+We are a team of three sharing the same code base. 
+\begin{itemize}
+\item Christina Sun
+\item Husna Kalim
+\item Ali Asgari Khoushouyeh
+\end{itemize}
+
+
+It is noteworthy to mention that close to the extended deadline we realized that our code is orders of magnitude slower on my teammates' machines. So we sharing the plot data too. 
+\pagebreak
 \section{Q Learning Robot}
 (2) Once you have your robot working, measure its learning performance as follows:
 
 a) Draw a graph of a parameter that reflects a measure of progress of learning and comment on the convergence of learning of your robot.
-
 \begin{center}
 
 \begin{tikzpicture}
@@ -88,17 +98,16 @@ a) Draw a graph of a parameter that reflects a measure of progress of learning a
         xticklabel style={rotate=15},          
 ]
     \addplot[smooth,mark=.,blue] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobot.tex};
-    \addlegendentry{Momentum = 0, Binary}
+    \addlegendentry{$\epsilon=0.8$, $\gamma=0.9$, $\alpha=0.1$}
     \end{axis}
     \end{tikzpicture}
-
+\textbf{2-a}
 \end{center}
+We selected \emph{Corners} robot as our opponent. We heuristically knew that it is a good strategy to always fire to defeat the enemy. As this is a simple thing to figure out, we observe that the robot converges pretty fast at a good win rate of 90/100. Please note that for obtaining the win ratio, through the report, we always use a robot that uses a trained LUT but works with $\epsilon=0.05$ so that it actually exploits the trained LUT. 
 
+\pagebreak
 b) Using your robot, show a graph comparing the performance of your robot using on-policy learning vs off-policy learning.
-
-
 \begin{center}
-
 \begin{tikzpicture}
     \begin{axis}[
         xlabel=\# of training rounds,
@@ -112,9 +121,12 @@ b) Using your robot, show a graph comparing the performance of your robot using 
     \addlegendentry{off-policy}
     \end{axis}
     \end{tikzpicture}
-
+\textbf{2-b}
 \end{center}
+As you can see the off-policy learning converges at a lower win rate when we train it with the same number of rounds. From the course content we know that the on-policy learning may result into a more conservative robot. Hereby the robot might not be as risk taking. We are coding the decrease in enemy's energy as the reward, so there might be cases where our robot prefers to run away not to get hit instead of firing and winning. 
 
+
+\pagebreak
 c) Implement a version of your robot that assumes only terminal rewards and show \& compare its behaviour with one having intermediate rewards.
 \begin{center}
 
@@ -132,11 +144,14 @@ c) Implement a version of your robot that assumes only terminal rewards and show
     \addlegendentry{Q Learning}
     \end{axis}
     \end{tikzpicture}
-
+\textbf{2-c}
 \end{center}
+As you can see it takes 500x rounds to train the robot with only the terminal rewards. This is because the decrease in the enemy's energy is a really good approximate of actual winning and is early enough to provide our robot with adequate feedback. We coded +1 for winning and -1 reward for losing. 
 
+\pagebreak
 \section{Role of $\epsilon$}
 (3) This part is about exploration. While training via RL, the next move is selected randomly with probability $\epsilon$ and greedily with probability $1 - \epsilon$
+
 
 a) Compare training performance using different values of e including no exploration at all. Provide graphs of the measured performance of your tank vs $\epsilon$
 \begin{center}
@@ -157,23 +172,19 @@ a) Compare training performance using different values of e including no explora
     \addlegendentry{$\epsilon=0.8$}
     \end{axis}
     \end{tikzpicture}
-
+\textbf{3-a}
 \end{center}
-\begin{center}
+As it can be seen from the graph, there is no significant difference between the performance or our robot with regard to different values for $\epsilon$. We attribute this to the simplicity of the task of winning the \emph{Corners} robot. 
 
-\begin{tikzpicture}
-    \begin{axis}[
-        xlabel=b) epochs,
-        width=\textwidth,
-        ylabel=MSE]
-    \addplot[smooth,mark=.,blue] table {b.tex};
-    \addlegendentry{Momentum = 0, Bipolar}
-    \end{axis}
-    \end{tikzpicture}
+\pagebreak
+\section{Lessons Learned}
+One of the challenges we faced during this assignment was that we wanted to code the reward of hitting bullets in a way that it is applied in the state where the bullet was fired. Because of the delay, it can take up to 3 turns for the bullet to hit the enemy and only then we can observe the reward.
 
-\end{center}
+In order to correspond the steps and the rewards more accurately first we slowed down taking actions. We took actions every three turn. It was good for training and actually solved our training issue and the robot learned the strategy of almost always firing but it was not good for the test time. It only took actions third of the time and it caused it to loose. 
 
+To solve that issue we added a time depth to our Q Learning algorithm. The only difference is that instead of using state-action pairs as the keys to the lookup table, we are using triplets of state-actions (including the two past state-actions). This actually makes the time visible to our robot and we observed that it can easily and quickly learn the correspondence of rewards and the actions even if the rewards are delayed for 3 steps. 
 
+\pagebreak
 \begin{appendices}
 \section{Source Codes}
     \input{sources.tex}
