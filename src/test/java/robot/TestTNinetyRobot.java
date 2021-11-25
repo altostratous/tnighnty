@@ -10,21 +10,32 @@ import robocode.control.RobocodeEngine;
 import robocode.control.RobotSpecification;
 import robocode.control.events.BattleAdaptor;
 import robocode.control.events.BattleCompletedEvent;
-import robocode.control.events.BattleFinishedEvent;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class TestTNinetyRobot {
 
     @Test
     public void TestTrivialLUTRobot() {
+//        testRobot(new LUTTNinetyRobot0(), 1, 100);
+//        testRobot(new LUTTNinetyRobotOnline(), 1, 100);
+//        testRobot(new LUTTNinetyRobotTerminal(), 500, 100);
+        testRobot(new LUTTNinetyRobot05(), 1, 100);
+//        testRobot(new LUTTNinetyRobot(), 1, 100);
+    }
+
+    private void testRobot(Robot trainRobot, int step, int epochs) {
+
+        String outputFileName = "doc/" + trainRobot.getClass().getName() + ".tex";
+//        new File(outputFileName).deleteOnExit();
         new File("LUTTNinetyRobot.obj").deleteOnExit();
         ArrayList<IState> states = new ArrayList<>();
-        LUTTNinetyRobot trainRobot = new LUTTNinetyRobot();
         LUTTNinetyRobotConfident testRobot = new LUTTNinetyRobotConfident();
         Corners opponent = new Corners();
-//        Tracker opponent = new Tracker();
         System.setProperty("NOSECURITY", "true");
         RobocodeEngine.setLogMessagesEnabled(false);
         RobocodeEngine engine = new RobocodeEngine(new File(System.getProperty("user.home") + "/robocode/"));
@@ -32,20 +43,31 @@ public class TestTNinetyRobot {
             @Override
             public void onBattleCompleted(BattleCompletedEvent event) {
                 super.onBattleCompleted(event);
-                for (var result :
-                        event.getIndexedResults()) {
-                    System.out.print(result.getTeamLeaderName() + " " +  result.getFirsts() + " ");
+                boolean shouldPrint = false;
+                try {
+                    FileWriter of = new FileWriter(outputFileName, true);
+                    for (var result :
+                            event.getIndexedResults()) {
+                        if (Objects.equals(result.getTeamLeaderName(), testRobot.getClass().getCanonicalName() + "*")) {
+                            of.write(result.getFirsts() + " ");
+                            System.out.println(result.getFirsts());
+                            shouldPrint = true;
+                        }
+                    }
+                    if (shouldPrint) {
+                        of.write(((LUT) (new LUTTNinetyRobot().getLearning().getFunctionApproximation())).getSize() + "\n");
+                    }
+                    of.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                System.out.println(((LUT)(new LUTTNinetyRobot().getLearning().getFunctionApproximation())).getSize());
             }
         });
-        for (int i = 0; i < 50; i++) {
-            int numberOfRounds = 10;
-//            int numberOfRounds = 10;
+        for (int i = 0; i < epochs; i++) {
+            int numberOfRounds = step;
             BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
             Robot robot;
             if (i % 2 == 0) {
-//            if (true) {
                 engine.setVisible(false);
                 robot = trainRobot;
             } else {

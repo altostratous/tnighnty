@@ -58,8 +58,8 @@ public class States implements IState{
     @Override
     public double[] toVector() {
         return new double[]{
-//                this.x / 50,
-//                this.y / 50,
+//                this.x / 200,
+//                this.y / 200,
 //                (this.heading + 45) / 90,
 //                (this.bearing + 45) / 90,
 //                this.myEnergy / 40,

@@ -1,0 +1,182 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amssymb} % needed for math
+\usepackage{amsmath} % needed for math
+\usepackage[utf8]{inputenc} % this is needed for german umlauts
+\usepackage[ngerman]{babel} % this is needed for german umlauts
+\usepackage[T1]{fontenc}    % this is needed for correct output of umlauts in pdf
+\usepackage[margin=2.5cm]{geometry} %layout
+\usepackage{listings} % needed for the inclusion of source code
+
+% the following is needed for syntax highlighting
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ %
+  language=Java,                  % the language of the code
+  basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+  numbers=left,                   % where to put the line-numbers
+  numberstyle=\tiny\color{gray},  % the style that is used for the line-numbers
+  stepnumber=1,                   % the step between two line-numbers. If it's 1, each line
+                                  % will be numbered
+  numbersep=5pt,                  % how far the line-numbers are from the code
+  backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+  showspaces=false,               % show spaces adding particular underscores
+  showstringspaces=false,         % underline spaces within strings
+  showtabs=false,                 % show tabs within strings adding particular underscores
+  frame=single,                   % adds a frame around the code
+  rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+  tabsize=4,                      % sets default tabsize to 2 spaces
+  captionpos=b,                   % sets the caption-position to bottom
+  breaklines=true,                % sets automatic line breaking
+  breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+  title=\lstname,                 % show the filename of files included with \lstinputlisting;
+                                  % also try caption instead of title
+  keywordstyle=\color{blue},          % keyword style
+  commentstyle=\color{dkgreen},       % comment style
+  stringstyle=\color{mauve},         % string literal style
+  escapeinside={\%*}{*)},            % if you want to add a comment within your code
+  morekeywords={*,...}               % if you want to add more keywords to the set
+}
+
+% this is needed for forms and links within the text
+\usepackage{hyperref}
+\usepackage[toc,page]{appendix}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Variablen                                                          %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\authorName}{Ali Asgari Khoshouyeh (Student \#24868739)}
+\newcommand{\tags}{\authorName, my, tags}
+\title{CPEN 502 Assignment-b: Reinforcement Learning (Look Up Table)}
+\author{\authorName}
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PDF Meta information                                               %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{
+  pdfauthor   = {\authorName},
+  pdfkeywords = {\tags},
+  pdftitle    = {Reinforcement Learning (Look Up Table)}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% THE DOCUMENT BEGINS                                                %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\maketitle
+
+\section{Q Learning Robot}
+(2) Once you have your robot working, measure its learning performance as follows:
+
+a) Draw a graph of a parameter that reflects a measure of progress of learning and comment on the convergence of learning of your robot.
+
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=\# of training rounds,
+        width=\textwidth,
+        ylabel=\# of wins out of 100,
+        xticklabel style={rotate=15},          
+]
+    \addplot[smooth,mark=.,blue] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobot.tex};
+    \addlegendentry{Momentum = 0, Binary}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+
+b) Using your robot, show a graph comparing the performance of your robot using on-policy learning vs off-policy learning.
+
+
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=\# of training rounds,
+        width=\textwidth,
+        ylabel=\# of wins out of 100,
+        xticklabel style={rotate=15},          
+]
+    \addplot[smooth,mark=.,blue] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobotOnline.tex};
+    \addlegendentry{on-policy}
+    \addplot[smooth,mark=.,red] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobot.tex};
+    \addlegendentry{off-policy}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+
+c) Implement a version of your robot that assumes only terminal rewards and show \& compare its behaviour with one having intermediate rewards.
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=\# of training rounds,
+        width=\textwidth,
+        ylabel=\# of wins out of 100,
+        xticklabel style={rotate=15},          
+        xmode=log,
+]
+    \addplot[smooth,mark=.,blue] table [x expr=500*\coordindex, y index=0] {robot.LUTTNinetyRobotTerminal.tex};
+    \addlegendentry{Terminal Reward Only}
+    \addplot[smooth,mark=.,red] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobot.tex};
+    \addlegendentry{Q Learning}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+
+\section{Role of $\epsilon$}
+(3) This part is about exploration. While training via RL, the next move is selected randomly with probability $\epsilon$ and greedily with probability $1 - \epsilon$
+
+a) Compare training performance using different values of e including no exploration at all. Provide graphs of the measured performance of your tank vs $\epsilon$
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=\# of training rounds,
+        width=\textwidth,
+        ylabel=\# of wins out of 100,
+        xticklabel style={rotate=15},          
+        legend pos=north west,
+]
+    \addplot[smooth,mark=.,red] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobot0.tex};
+    \addlegendentry{$\epsilon=0.0$}
+    \addplot[smooth,mark=.,blue] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobot05.tex};
+    \addlegendentry{$\epsilon=0.5$}
+    \addplot[smooth,mark=.,green] table [x expr=\coordindex, y index=0] {robot.LUTTNinetyRobot.tex};
+    \addlegendentry{$\epsilon=0.8$}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+\begin{center}
+
+\begin{tikzpicture}
+    \begin{axis}[
+        xlabel=b) epochs,
+        width=\textwidth,
+        ylabel=MSE]
+    \addplot[smooth,mark=.,blue] table {b.tex};
+    \addlegendentry{Momentum = 0, Bipolar}
+    \end{axis}
+    \end{tikzpicture}
+
+\end{center}
+
+
+\begin{appendices}
+\section{Source Codes}
+    \input{sources.tex}
+\end{appendices}
+
+\end{document}
