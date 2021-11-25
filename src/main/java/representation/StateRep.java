@@ -1,7 +1,5 @@
 package representation;
-import robocode.ScannedRobotEvent;
-import robocode.Event;
-import robocode.StatusEvent;
+import robocode.*;
 
 public class StateRep implements IStateRepresentation {
     public StateRep()  {}
@@ -27,6 +25,12 @@ public class StateRep implements IStateRepresentation {
             states.setY((int) statusEvent.getStatus().getY());
             states.setHeading((int) statusEvent.getStatus().getHeading());
             states.setMyEnergy((int) statusEvent.getStatus().getEnergy());
+        }
+        if (event instanceof WinEvent) {
+            states.setEnemyEnergy(0);
+        }
+        if (event instanceof DeathEvent) {
+            states.setMyEnergy(0);
         }
         return states;
     }

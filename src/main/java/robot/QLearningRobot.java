@@ -67,7 +67,7 @@ public class QLearningRobot extends Robot {
     }
 
     private void processEvent(Event event) {
-        if (event instanceof ScannedRobotEvent && this.getTurn() > this.lastTurn) {
+        if (event instanceof ScannedRobotEvent && this.getTurn() > this.lastTurn || event instanceof WinEvent || event instanceof DeathEvent) {
             IState newState = learning.getStateRepresentation().represent(getState(), lastStatusEvent);
             newState = learning.getStateRepresentation().represent(newState, event);
             //set current state
@@ -78,6 +78,18 @@ public class QLearningRobot extends Robot {
             System.out.println("Turn " + this.lastTurn);
             takeAction(action);
         }
+    }
+
+    @Override
+    public void onWin(WinEvent event) {
+        super.onWin(event);
+        processEvent(event);
+    }
+
+    @Override
+    public void onDeath(DeathEvent event) {
+        super.onDeath(event);
+        processEvent(event);
     }
 
     private IAction getLastAction() {
