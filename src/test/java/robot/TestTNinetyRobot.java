@@ -24,7 +24,7 @@ public class TestTNinetyRobot {
 //        testRobot(new LUTTNinetyRobot0(), 1, 100);
 //        testRobot(new LUTTNinetyRobotOnline(), 1, 100);
 //        testRobot(new LUTTNinetyRobotTerminal(), 500, 100);
-        testRobot(new LUTTNinetyRobot05(), 1, 100);
+        testRobot(new LUTTNinetyRobot05(), 100, 100);
 //        testRobot(new LUTTNinetyRobot(), 1, 100);
     }
 

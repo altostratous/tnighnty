@@ -8,12 +8,11 @@ import java.util.HashMap;
 public class LUT implements IFunctionApproximation {
 
     private final String filePath;
-    int distance_level = 3;
-    int robot_energy_level = 3;
-    int enemy_energy_level = 3;
-    int position_level = 48;
-    HashMap StateMap = new HashMap(distance_level * robot_energy_level *
-            enemy_energy_level * position_level);
+//    int distance_level = 3;
+//    int robot_energy_level = 3;
+//    int enemy_energy_level = 3;
+//    int position_level = 48;
+    static HashMap StateMap = new HashMap();
     boolean readOnly;
 
 
@@ -34,11 +33,11 @@ public class LUT implements IFunctionApproximation {
     //LEFT HERE: finish the two methods below for implementation tomorrow morning.
     // for each unique state vector, generate its key and match it with a state object that contains 5 actions
 
-    public void initialiseLUT() {
-        for (int distance = 0; distance < distance_level; distance++) {
-            for (int robot_energy = 0; robot_energy < robot_energy_level; robot_energy++) {
-                for (int enemy_energy = 0; enemy_energy < enemy_energy_level; enemy_energy++) {
-                    for (int position = 0; position < position_level; position++) {
+//    public void initialiseLUT() {
+//        for (int distance = 0; distance < distance_level; distance++) {
+//            for (int robot_energy = 0; robot_energy < robot_energy_level; robot_energy++) {
+//                for (int enemy_energy = 0; enemy_energy < enemy_energy_level; enemy_energy++) {
+//                    for (int position = 0; position < position_level; position++) {
                         //double[] state_vector = {distance, robot_energy, enemy_energy, position};
                         //double key = indexFor(state_vector);
 //                        State newState = new State(distance, robot_energy, enemy_energy, position);
@@ -46,12 +45,12 @@ public class LUT implements IFunctionApproximation {
 //                        newState.addAll(); // add all actions for each state?
 
 //                        StateMap.put(newState, newState);
-
-                    }
-                }
-            }
-        }
-    }
+//
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 
 
