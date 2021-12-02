@@ -1,21 +1,42 @@
 package fa;
 
+import autograd.IInitializer;
 import dataset.DataPoint;
+import dataset.IDataSet;
+import dataset.LookupTableDataSet;
+import dataset.RobotDataSet;
+import nn.IFitCallback;
+import nn.ILayer;
+import nn.Model;
+import optimization.ILoss;
+import optimization.IOptimizer;
 import representation.IRepresentable;
 
 import java.io.IOException;
 
-// TODO Christina and Huna
+// TODO Christina and Husna
 public class NN implements IFunctionApproximation {
+    IOptimizer optimizer;
+    ILayer activation;
+    IInitializer initializer;
+    IDataSet dataSet = new RobotDataSet();
+    Model model;
+    ILoss loss;
+    int epochs;
+    double lossLimit;
+    IFitCallback callback;
+
     public NN(String filePath, boolean readOnly) {
         // construct the neural network
+
     }
 
     @Override
     public void train(IRepresentable input, double[] output) {
-        DataPoint dataPoint = new DataPoint(input.toVector(), output);
         // construct a single datapoint dataset out of the data point
+        dataSet.addPattern(input, output);
         // call fit on the neural network
+        model.fit(dataSet, optimizer, loss, epochs, lossLimit, callback);
     }
 
     @Override

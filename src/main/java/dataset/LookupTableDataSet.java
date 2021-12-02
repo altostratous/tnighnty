@@ -8,6 +8,7 @@ public class LookupTableDataSet implements IDataSet {
 
     }
 
+
     @Override
     public DataPoint next() {
         // return null when exhausted
