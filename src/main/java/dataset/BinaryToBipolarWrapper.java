@@ -27,4 +27,9 @@ public class BinaryToBipolarWrapper implements IDataSet {
     public void reset() {
         binaryDataSet.reset();
     }
+
+    @Override
+    public DataPoint onlyReadNext() {
+        return binaryDataSet.onlyReadNext();
+    }
 }

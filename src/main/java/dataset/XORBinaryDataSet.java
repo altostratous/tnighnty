@@ -36,4 +36,11 @@ public class XORBinaryDataSet implements IDataSet {
     public void reset() {
         index = 0;
     }
+
+    @Override
+    public DataPoint onlyReadNext() {
+        if (index < x.length) {
+            return new DataPoint(x[index], new double[]{y[index]});
+        }
+        return null;    }
 }

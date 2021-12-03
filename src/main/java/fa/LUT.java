@@ -12,7 +12,7 @@ public class LUT implements IFunctionApproximation {
 //    int robot_energy_level = 3;
 //    int enemy_energy_level = 3;
 //    int position_level = 48;
-    static HashMap StateMap = new HashMap();
+    private HashMap StateMap = new HashMap();
     boolean readOnly;
 
 
@@ -89,5 +89,9 @@ public class LUT implements IFunctionApproximation {
 
     public int getSize() {
         return this.StateMap.size();
+    }
+
+    public HashMap getHashMap() {
+        return this.StateMap;
     }
 }

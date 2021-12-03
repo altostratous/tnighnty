@@ -25,8 +25,8 @@ public class TestTNinetyRobot {
 //        testRobot(new LUTTNinetyRobotOnline(), 1, 100);
 //        testRobot(new LUTTNinetyRobotTerminal(), 500, 100);
 //        testRobot(new LUTTNinetyRobot05(), 100, 100);
-//        testRobot(new LUTTNinetyRobot(), 1, 100);
-        testRobot(new NNTNinetyRobot(), 100, 100);
+//        testRobot(new LUTTNinetyRobot(), 500, 2);
+//        testRobot(new NNTNinetyRobot(), 100, 100);
     }
 
     private void testRobot(Robot trainRobot, int step, int epochs) {

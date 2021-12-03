@@ -1,22 +1,47 @@
 package dataset;
 
 import fa.LUT;
+import representation.IRepresentable;
+
+import javax.naming.InsufficientResourcesException;
+import javax.xml.crypto.Data;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 // TODO Christina and Husna
 public class LookupTableDataSet implements IDataSet {
-    public LookupTableDataSet(LUT lut) {
 
+    ArrayList<DataPoint> points = new ArrayList<>();
+    int index = 0;
+
+    public LookupTableDataSet(LUT lut) {
+        HashMap map = lut.getHashMap();
+        for (Object key :
+                map.keySet()) {
+            IRepresentable representable = (IRepresentable) key;
+            points.add(new DataPoint(
+                    representable.toVector(),
+                    lut.eval(representable)));
+
+        }
     }
 
     @Override
     public DataPoint next() {
-        // return null when exhausted
-        // keep a counter iterating over the hash map
-        return new DataPoint(new double[0], new double[0]);
+        if (index < points.size())
+            return points.get(index++);
+        return null;
     }
 
     @Override
     public void reset() {
-        // only resets the counter to zero
+        index = 0;
+    }
+
+    @Override
+    public DataPoint onlyReadNext() {
+        if (index < points.size())
+            return points.get(index);
+        return null;
     }
 }

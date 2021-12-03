@@ -9,10 +9,8 @@ import jdk.jshell.spi.ExecutionControl;
 import optimization.ILoss;
 import optimization.IOptimizer;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import javax.xml.crypto.Data;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Model {
@@ -70,6 +68,9 @@ public class Model {
     }
 
     public double fit(IDataSet dataSet, IOptimizer optimizer, ILoss loss, int epochs, double lossLimit, IFitCallback callback) throws ExecutionControl.NotImplementedException {
+        return fit(dataSet, optimizer, loss, epochs, lossLimit, callback, 1);
+    }
+    public double fit(IDataSet dataSet, IOptimizer optimizer, ILoss loss, int epochs, double lossLimit, IFitCallback callback, int batchSize) throws ExecutionControl.NotImplementedException {
         var parameters = getTrainableParameters();
         Map<Integer, List<Parameter>> layeredParameters = layerParameters(parameters);
         if (epochs < 1) {
@@ -80,19 +81,28 @@ public class Model {
             totalLoss = 0;
             dataSet.reset();
             DataPoint dataPoint;
-            while ((dataPoint = dataSet.next()) != null) {
-                setInput(dataPoint.getX());
-                loss.setDesired(dataPoint.getY());
-                totalLoss += loss.evaluate();
-                for (Integer j : layeredParameters.keySet().stream().sorted().collect(Collectors.toList())) {
+            List<Integer> backwardLayers = layeredParameters.keySet().stream().sorted().collect(Collectors.toList());
+            while (dataSet.onlyReadNext() != null) {
+                for (Integer j : backwardLayers) {
+                    int batchCounter = 0;
+                    var batch = new ArrayList<DataPoint>();
+                    while (batchCounter < batchSize && (dataPoint = dataSet.next()) != null) {
+                        batch.add(dataPoint);
+                        batchCounter++;
+                    }
                     Parameter[] layerParameters = layeredParameters.get(j).toArray(new Parameter[0]);
-                    loss.backward(layerParameters, 1.);
+                    for(DataPoint p: batch) {
+                        setInput(p.getX());
+                        loss.setDesired(p.getY());
+                        totalLoss += loss.evaluate();
+                        loss.backward(layerParameters, 1.);
+                    }
                     optimizer.update(layerParameters);
                 }
-            }
-            callback.collect(i, totalLoss);
-            if (totalLoss < lossLimit) {
-                break;
+                callback.collect(i, totalLoss);
+                if (totalLoss < lossLimit) {
+                    break;
+                }
             }
         }
         return totalLoss;
