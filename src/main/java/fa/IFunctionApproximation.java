@@ -12,4 +12,6 @@ public interface IFunctionApproximation {
     void save() throws IOException;
 
     void load() throws IOException, ClassNotFoundException;
+
+    int getSize();
 }

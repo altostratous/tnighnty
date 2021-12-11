@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class TestLUTNN {
 
-//    @Ignore
+    @Ignore
     @Test
     public void TestBipolarMomentumGD() throws ExecutionControl.NotImplementedException, IOException, ClassNotFoundException {
         int diverged = 0;

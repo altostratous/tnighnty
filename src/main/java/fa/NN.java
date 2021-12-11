@@ -13,20 +13,23 @@ import optimization.ILoss;
 import optimization.IOptimizer;
 import representation.IRepresentable;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 
 // TODO Christina and Husna
 public class NN implements IFunctionApproximation {
     Model model = Factory.createNeuralNetwork(
-            new int[]{2, 4, 1},
+            new int[]{15, 10, 1},
             new BipolarSigmoid(),
-            new UniformInitializer(-0.5, 0.5));
+            new UniformInitializer(-0.05, 0.05),
+            false
+    );
     IOptimizer optimizer = new GradientDescent(0.2, 0.9);;
     ILayer activation;
     IInitializer initializer;
     RobotDataSet dataSet = new RobotDataSet();
     ILoss loss = new MinimumSquaredError(model.getOutput());
-    int epochs = 1000;
+    int epochs = 1;
     double lossLimit = 0.05;
     IFitCallback collector = new ConvergenceCollector();
 
@@ -46,6 +49,7 @@ public class NN implements IFunctionApproximation {
         System.out.println();
         // construct a single datapoint dataset out of the data point
         dataSet.addPattern(input, output);
+        System.out.println("SIZE: " + dataSet.getSize());
         // call fit on the neural network
         try {
             model.fit(dataSet, optimizer, loss, epochs, lossLimit, collector);
@@ -65,7 +69,9 @@ public class NN implements IFunctionApproximation {
     public void save() throws IOException {
         // save all the parameters of the neural network, the weights
         if (readOnly) return;
-        new ObjectOutputStream(new FileOutputStream(this.filePath)).writeObject(model);
+        ObjectOutputStream stream = new ObjectOutputStream(new FileOutputStream(this.filePath));
+//        stream.writeObject(model);
+        stream.writeObject(dataSet);
         // save the entire model, or just the weights?
         // need to record the different versions of weight along the way?
     }
@@ -73,7 +79,13 @@ public class NN implements IFunctionApproximation {
     @Override
     public void load() throws IOException, ClassNotFoundException {
         // load the weights of the neural network from the filePath
-        model = (Model) new ObjectInputStream(new FileInputStream(this.filePath)).readObject();
+        ObjectInputStream stream = new ObjectInputStream(new FileInputStream(this.filePath));
+//        model = (Model) stream.readObject();
+        dataSet = (RobotDataSet) stream.readObject();
+    }
 
+    @Override
+    public int getSize() {
+        return dataSet.getSize();
     }
 }

@@ -26,10 +26,10 @@ public class TestTNinetyRobot {
 //        testRobot(new LUTTNinetyRobotTerminal(), 500, 100);
 //        testRobot(new LUTTNinetyRobot05(), 100, 100);
 //        testRobot(new LUTTNinetyRobot(), 500, 2);
-//        testRobot(new NNTNinetyRobot(), 100, 100);
+        testRobot(new NNTNinetyRobot(), 1, 100);
     }
 
-    private void testRobot(Robot trainRobot, int step, int epochs) {
+    private void testRobot(Robot trainRobot, int rounds, int battles) {
 
         String outputFileName = "doc/" + trainRobot.getClass().getName() + ".tex";
 //        new File(outputFileName).deleteOnExit();
@@ -56,7 +56,7 @@ public class TestTNinetyRobot {
                         }
                     }
                     if (shouldPrint) {
-                        of.write(((LUT) (new LUTTNinetyRobot().getLearning().getFunctionApproximation())).getSize() + "\n");
+                        System.out.println(((NNTNinetyRobot) trainRobot).getLearning().getFunctionApproximation().getSize() + "\n");
                     }
                     of.close();
                 } catch (IOException e) {
@@ -64,8 +64,8 @@ public class TestTNinetyRobot {
                 }
             }
         });
-        for (int i = 0; i < epochs; i++) {
-            int numberOfRounds = step;
+        for (int i = 0; i < battles; i++) {
+            int numberOfRounds = rounds;
             BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
             Robot robot;
             if (i % 2 == 0) {

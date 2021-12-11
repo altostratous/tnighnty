@@ -2,10 +2,11 @@ package dataset;
 
 import representation.IRepresentable;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class RobotDataSet implements IDataSet {
+public class RobotDataSet implements IDataSet, Serializable {
     ArrayList<double[]> x = new ArrayList<double[]>();
     ArrayList<double[]> y = new ArrayList<double[]>();
     int index = 0;
@@ -41,5 +42,9 @@ public class RobotDataSet implements IDataSet {
             return new DataPoint(x.get(index), y.get(index));
         }
         return null;
+    }
+
+    public int getSize() {
+        return x.size();
     }
 }

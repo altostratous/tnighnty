@@ -10,6 +10,7 @@ import optimization.ILoss;
 import optimization.IOptimizer;
 
 import javax.xml.crypto.Data;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
