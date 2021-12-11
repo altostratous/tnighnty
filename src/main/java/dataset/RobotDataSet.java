@@ -34,4 +34,12 @@ public class RobotDataSet implements IDataSet {
     public void reset() {
         index = 0;
     }
+
+    @Override
+    public DataPoint onlyReadNext() {
+        if (index < x.size()) {
+            return new DataPoint(x.get(index), y.get(index));
+        }
+        return null;
+    }
 }

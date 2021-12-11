@@ -6,6 +6,7 @@ import dataset.DataPoint;
 import dataset.IDataSet;
 import dataset.LookupTableDataSet;
 import dataset.RobotDataSet;
+import jdk.jshell.spi.ExecutionControl;
 import nn.*;
 import optimization.GradientDescent;
 import optimization.ILoss;
@@ -23,7 +24,7 @@ public class NN implements IFunctionApproximation {
     IOptimizer optimizer = new GradientDescent(0.2, 0.9);;
     ILayer activation;
     IInitializer initializer;
-    IDataSet dataSet = new RobotDataSet();
+    RobotDataSet dataSet = new RobotDataSet();
     ILoss loss = new MinimumSquaredError(model.getOutput());
     int epochs = 1000;
     double lossLimit = 0.05;
@@ -46,7 +47,11 @@ public class NN implements IFunctionApproximation {
         // construct a single datapoint dataset out of the data point
         dataSet.addPattern(input, output);
         // call fit on the neural network
-        model.fit(dataSet, optimizer, loss, epochs, lossLimit, collector);
+        try {
+            model.fit(dataSet, optimizer, loss, epochs, lossLimit, collector);
+        } catch (ExecutionControl.NotImplementedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
