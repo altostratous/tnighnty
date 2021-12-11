@@ -21,6 +21,7 @@ public class GradientDescent implements IOptimizer {
         for (Parameter p :
                 parameters) {
             double delta = -p.getGradient() * learningRate + momentum * lastDelta.getOrDefault(p, 0.);
+//            System.out.println(p.getValue() + " " + delta);
             p.setValue(p.getValue() + delta);
             p.zeroGradient();
             lastDelta.put(p, delta);

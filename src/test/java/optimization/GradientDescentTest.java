@@ -19,7 +19,7 @@ public class GradientDescentTest {
 
     private final static int trials = 300;
 
-//    @Ignore
+    @Ignore
     @Test
     public void TestSimpleGD() throws ExecutionControl.NotImplementedException {
         var model = Factory.createNeuralNetwork(
@@ -34,7 +34,7 @@ public class GradientDescentTest {
         Assert.assertTrue("Big loss " + finalLoss, finalLoss < 0.05);
     }
 
-//    @Ignore("Skipping slow convergence tests.")
+    @Ignore("Skipping slow convergence tests.")
     @Test
     public void TestConvergence() throws ExecutionControl.NotImplementedException, IOException {
         int diverged = 0;
@@ -71,7 +71,7 @@ public class GradientDescentTest {
         of.close();
     }
 
-//    @Ignore("Skipping slow convergence tests.")
+    @Ignore("Skipping slow convergence tests.")
     @Test
     public void TestBipolarGD() throws ExecutionControl.NotImplementedException, IOException {
         int diverged = 0;
@@ -97,7 +97,7 @@ public class GradientDescentTest {
         Assert.assertTrue("Convergence with high probability busted! " + diverged + " failure out of " + trials, diverged < 6);
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void TestBipolarMomentumGD() throws ExecutionControl.NotImplementedException, IOException {
 

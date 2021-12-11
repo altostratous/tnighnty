@@ -1,21 +1,19 @@
 package robot;
 
 import autograd.UniformInitializer;
-import dataset.BinaryToBipolarWrapper;
-import dataset.IDataSet;
-import dataset.LookupTableDataSet;
-import dataset.XORBinaryDataSet;
+import dataset.*;
 import fa.LUT;
 import jdk.jshell.spi.ExecutionControl;
-import nn.BipolarSigmoid;
-import nn.ConvergenceCollector;
-import nn.Factory;
-import nn.MinimumSquaredError;
+import nn.*;
 import optimization.GradientDescent;
 import optimization.GradientDescentTest;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
+import representation.Concatenation;
+import representation.ConcatenationRepresentation;
+import representation.States;
+import representation.TNinetyAction;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -23,37 +21,79 @@ import java.util.ArrayList;
 
 public class TestLUTNN {
 
-    @Ignore
+//    @Ignore
     @Test
     public void TestBipolarMomentumGD() throws ExecutionControl.NotImplementedException, IOException, ClassNotFoundException {
         int diverged = 0;
-        int trials = 300;
+        int trials = 3000;
         ArrayList<ConvergenceCollector> stats = new ArrayList<>();
-        for (int i = 0; i < trials; i++) {
-            var model = Factory.createNeuralNetwork(
-                    new int[]{6, 12, 1},
-                    new BipolarSigmoid(),
-                    new UniformInitializer(-0.5, 0.5)
-            );
-            LUT lut = new LUT(this.getClass().getClassLoader().getResource("LUTTNinetyRobot.obj").getPath(), true);
-            lut.load();
-            IDataSet dataSet = new LookupTableDataSet(lut);
-            for (int j = 0; j < 1; j++) {
-                var p = dataSet.next();
-                for (int k = 0; k < p.getX().length; k++) {
-                    System.out.print(p.getX()[k] + " ");
-                }
-                System.out.println();
-                System.out.println("Desired " + p.getY()[0]);
-                System.out.println("model output " + model.evaluate(p.getX())[0]);
-            }
+        LUT lut = new LUT(this.getClass().getClassLoader().getResource("LUTTNinetyRobot.obj").getPath(), true);
+        lut.load();
+        IDataSet dataSet = new LookupTableDataSet(lut);
 
-            var optimizer = new GradientDescent(0.000001, 0.1);
+        var model = Factory.createNeuralNetwork(
+                new int[]{15, 10, 1},
+                new BipolarSigmoid(),
+                new UniformInitializer(-0.05, 0.05),
+                false
+        );
+        var optimizer = new GradientDescent(1e-4, 0.9);
+
+        for (int i = 0; i < trials; i++) {
+//            for (int j = 0; j < 1; j++) {
+//                dataSet.reset();
+//                var p = dataSet.next();
+//                for (int k = 0; k < p.getX().length; k++) {
+//                    System.out.print(p.getX()[k] + " ");
+//                }
+//                System.out.println();
+//                System.out.println("Desired " + p.getY()[0]);
+//                System.out.println("model output " + model.evaluate(p.getX())[0]);
+//            }
+
             var loss = new MinimumSquaredError(model.getOutput());
             var collector = new ConvergenceCollector();
-            double finalLoss = model.fit(dataSet, optimizer, loss, 10, 0.05, collector);
+            double finalLoss = model.fit(dataSet, optimizer, loss, 100, 0.05, collector, true);
             if (finalLoss > 0.05) {
-                System.out.println(finalLoss);
+                System.out.println(Math.sqrt(finalLoss / lut.getSize()));
+                var fireKey = new Concatenation(
+                        new Concatenation(
+                                new Concatenation(
+                                        new States(500, 300, 300, 90, 100, 50, 90),
+                                        new TNinetyAction(TNinetyAction.ActionType.FIRE)
+                                ),
+                                new Concatenation(
+                                        new States(500, 300, 300, 90, 100, 50, 90),
+                                        new TNinetyAction(TNinetyAction.ActionType.FIRE)
+                                )
+                        ),
+                        new Concatenation(
+                                new States(500, 300, 300, 90, 100, 50, 90),
+                                new TNinetyAction(TNinetyAction.ActionType.FIRE)
+                        )
+                );
+
+                var aheadKey = new Concatenation(
+                        new Concatenation(
+                                new Concatenation(
+                                        new States(500, 300, 300, 90, 100, 50, 90),
+                                        new TNinetyAction(TNinetyAction.ActionType.AHEAD)
+                                ),
+                                new Concatenation(
+                                        new States(500, 300, 300, 90, 100, 50, 90),
+                                        new TNinetyAction(TNinetyAction.ActionType.FIRE)
+                                )
+                        ),
+                        new Concatenation(
+                                new States(500, 300, 300, 90, 100, 50, 90),
+                                new TNinetyAction(TNinetyAction.ActionType.FIRE)
+                        )
+                );
+//                System.out.println("FIRE from model " + model.evaluate(fireKey.toVector())[0]);
+//                System.out.println("FIRE from LUT " + lut.eval(fireKey)[0]);
+//                System.out.println("AHEAD from model " + model.evaluate(aheadKey.toVector())[0]);
+//                System.out.println("AHEAD from LUT " + lut.eval(aheadKey)[0]);
+//                System.out.println();
                 diverged += 1;
             }
             stats.add(collector);
