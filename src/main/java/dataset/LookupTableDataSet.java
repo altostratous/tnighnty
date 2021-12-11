@@ -26,6 +26,7 @@ public class LookupTableDataSet implements IDataSet {
         }
     }
 
+
     @Override
     public DataPoint next() {
         if (index < points.size())
