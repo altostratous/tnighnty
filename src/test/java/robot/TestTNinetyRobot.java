@@ -1,6 +1,9 @@
 package robot;
 
+import fa.IFunctionApproximation;
 import fa.LUT;
+import fa.NN;
+import jdk.jshell.spi.ExecutionControl;
 import org.junit.Test;
 import representation.IState;
 import robocode.Robot;
@@ -33,9 +36,9 @@ public class TestTNinetyRobot {
 
         String outputFileName = "doc/" + trainRobot.getClass().getName() + ".tex";
 //        new File(outputFileName).deleteOnExit();
-        new File("LUTTNinetyRobot.obj").deleteOnExit();
+        new File("NNTNinetyRobot.obj").deleteOnExit();
         ArrayList<IState> states = new ArrayList<>();
-        LUTTNinetyRobotConfident testRobot = new LUTTNinetyRobotConfident();
+        NNTNinetyRobotConfident testRobot = new NNTNinetyRobotConfident();
         Corners opponent = new Corners();
         System.setProperty("NOSECURITY", "true");
         RobocodeEngine.setLogMessagesEnabled(false);
@@ -56,10 +59,12 @@ public class TestTNinetyRobot {
                         }
                     }
                     if (shouldPrint) {
-                        System.out.println(((NNTNinetyRobot) trainRobot).getLearning().getFunctionApproximation().getSize() + "\n");
+                        NN functionApproximation = (NN) (new NNTNinetyRobot()).getLearning().getFunctionApproximation();
+                        System.out.println(functionApproximation.getSize() + "\n");
+                        System.out.println(functionApproximation.getLoss() + "\n");
                     }
                     of.close();
-                } catch (IOException e) {
+                } catch (IOException | ExecutionControl.NotImplementedException e) {
                     e.printStackTrace();
                 }
             }

@@ -10,13 +10,18 @@ public class RobotDataSet implements IDataSet, Serializable {
     ArrayList<double[]> x = new ArrayList<double[]>();
     ArrayList<double[]> y = new ArrayList<double[]>();
     int index = 0;
-    public RobotDataSet() {
-
+    int offset = 0;
+    int windowSize;
+    public RobotDataSet(int windowSize) {
+        this.windowSize = windowSize;
     }
 
     public void addPattern(IRepresentable input, double[] output) {
         x.add(input.toVector());
         y.add(output);
+        if (x.size() > windowSize) {
+            offset = x.size() - windowSize;
+        }
     }
 
 
@@ -33,7 +38,7 @@ public class RobotDataSet implements IDataSet, Serializable {
 
     @Override
     public void reset() {
-        index = 0;
+        index = offset;
     }
 
     @Override
@@ -45,6 +50,15 @@ public class RobotDataSet implements IDataSet, Serializable {
     }
 
     public int getSize() {
-        return x.size();
+        if (x.size() < windowSize) return x.size();
+        return windowSize;
+    }
+
+    public ArrayList<double[]> getX() {
+        return x;
+    }
+
+    public ArrayList<double[]> getY() {
+        return y;
     }
 }

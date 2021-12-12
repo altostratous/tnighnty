@@ -1,8 +1,9 @@
 package autograd;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Parameter implements IVariable {
+public class Parameter implements IVariable, Serializable {
     private double value;
     private double gradient;
     private boolean trainable;

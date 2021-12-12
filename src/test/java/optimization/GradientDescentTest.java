@@ -29,7 +29,7 @@ public class GradientDescentTest {
         );
         var dataSet = new XORBinaryDataSet();
         var optimizer = new GradientDescent(0.2, 0.);
-        var loss = new MinimumSquaredError(model.getOutput());
+        var loss = new MeanSquaredError(model.getOutput());
         double finalLoss = model.fit(dataSet, optimizer, loss, 40000, 0.05);
         Assert.assertTrue("Big loss " + finalLoss, finalLoss < 0.05);
     }
@@ -47,7 +47,7 @@ public class GradientDescentTest {
             );
             var dataSet = new XORBinaryDataSet();
             var optimizer = new GradientDescent(0.2, 0.);
-            var loss = new MinimumSquaredError(model.getOutput());
+            var loss = new MeanSquaredError(model.getOutput());
             var collector = new ConvergenceCollector();
             double finalLoss = model.fit(dataSet, optimizer, loss, 40000, 0.05, collector);
             stats.add(collector);
@@ -85,7 +85,7 @@ public class GradientDescentTest {
             );
             var dataSet = new BinaryToBipolarWrapper(new XORBinaryDataSet());
             var optimizer = new GradientDescent(0.2, 0.);
-            var loss = new MinimumSquaredError(model.getOutput());
+            var loss = new MeanSquaredError(model.getOutput());
             var collector = new ConvergenceCollector();
             double finalLoss = model.fit(dataSet, optimizer, loss, 3500, 0.05, collector);
             if (finalLoss > 0.05) {
@@ -112,7 +112,7 @@ public class GradientDescentTest {
             );
             var dataSet = new BinaryToBipolarWrapper(new XORBinaryDataSet());
             var optimizer = new GradientDescent(0.2, 0.9);
-            var loss = new MinimumSquaredError(model.getOutput());
+            var loss = new MeanSquaredError(model.getOutput());
             var collector = new ConvergenceCollector();
             double finalLoss = model.fit(dataSet, optimizer, loss, 1000, 0.05, collector);
             if (finalLoss > 0.05) {

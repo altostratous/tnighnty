@@ -6,16 +6,13 @@ import fa.LUT;
 import jdk.jshell.spi.ExecutionControl;
 import nn.*;
 import optimization.GradientDescent;
-import optimization.GradientDescentTest;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import representation.Concatenation;
-import representation.ConcatenationRepresentation;
 import representation.States;
 import representation.TNinetyAction;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -51,7 +48,7 @@ public class TestLUTNN {
 //                System.out.println("model output " + model.evaluate(p.getX())[0]);
 //            }
 
-            var loss = new MinimumSquaredError(model.getOutput());
+            var loss = new MeanSquaredError(model.getOutput());
             var collector = new ConvergenceCollector();
             double finalLoss = model.fit(dataSet, optimizer, loss, 100, 0.05, collector, true);
             if (finalLoss > 0.05) {

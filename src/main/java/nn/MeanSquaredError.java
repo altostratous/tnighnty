@@ -4,12 +4,12 @@ import autograd.*;
 import jdk.jshell.spi.ExecutionControl;
 import optimization.ILoss;
 
-public class MinimumSquaredError implements IVariable, ILoss {
+public class MeanSquaredError implements IVariable, ILoss {
 
     private final IVariable operation;
     private final Parameter[] desired;
 
-    public MinimumSquaredError(IVariable[] output) {
+    public MeanSquaredError(IVariable[] output) {
         var negation = new Negation();
         var addition = new Addition();
         var multiplication = new Multiplication();
