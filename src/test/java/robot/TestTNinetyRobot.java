@@ -45,7 +45,7 @@ public class TestTNinetyRobot {
 
         String outputFileName = "doc/" + trainRobot.getClass().getName() + ".tex";
 //        new File(outputFileName).deleteOnExit();
-//        new File("NNTNinetyRobot.obj").deleteOnExit();
+        new File("NNTNinetyRobot.obj").deleteOnExit();
         ArrayList<IState> states = new ArrayList<>();
         NNTNinetyRobotConfident testRobot = new NNTNinetyRobotConfident();
         Corners opponent = new Corners();

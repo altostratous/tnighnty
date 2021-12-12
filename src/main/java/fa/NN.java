@@ -26,9 +26,9 @@ public class NN implements IFunctionApproximation {
     IOptimizer optimizer = new GradientDescent(1e-4, 0.9);
     ILayer activation;
     IInitializer initializer;
-    RobotDataSet dataSet = new RobotDataSet(1);
+    RobotDataSet dataSet = new RobotDataSet(20);
     ILoss loss = new MeanSquaredError(model.getOutput());
-    int epochs = 10;
+    int epochs = 1;
     double lossLimit = 0.05;
     IFitCallback collector = new ConvergenceCollector();
 
@@ -97,15 +97,16 @@ public class NN implements IFunctionApproximation {
     }
 
     public double getLoss() throws ExecutionControl.NotImplementedException {
-        return model.fit(new IDataSet() {
+        IDataSet wrappedDataset = new IDataSet() {
             int index = 0;
+
             @Override
             public DataPoint next() {
-                if (dataSet.getX().size() <= index) {
+                if (NN.this.dataSet.getX().size() <= index) {
                     return null;
                 }
-                DataPoint dataPoint = new DataPoint(dataSet.getX().get(index), dataSet.getY().get(index));
-                index ++;
+                DataPoint dataPoint = new DataPoint(NN.this.dataSet.getX().get(index), NN.this.dataSet.getY().get(index));
+                index++;
                 return dataPoint;
             }
 
@@ -118,7 +119,8 @@ public class NN implements IFunctionApproximation {
             public DataPoint onlyReadNext() {
                 return null;
             }
-        }, new GradientDescent(0, 0), loss, 1, 0) / dataSet.getX().size();
+        };
+        return model.fit(dataSet, new GradientDescent(0, 0), loss, 1, 0) / this.dataSet.getSize();
     }
 
     public RobotDataSet getDataSet() {
