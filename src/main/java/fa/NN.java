@@ -23,12 +23,12 @@ public class NN implements IFunctionApproximation {
             new UniformInitializer(-0.05, 0.05),
             false
     );
-    IOptimizer optimizer = new GradientDescent(1e-5, 0.9);
+    IOptimizer optimizer = new GradientDescent(1e-4, 0.9);
     ILayer activation;
     IInitializer initializer;
-    RobotDataSet dataSet = new RobotDataSet(50);
+    RobotDataSet dataSet = new RobotDataSet(1);
     ILoss loss = new MeanSquaredError(model.getOutput());
-    int epochs = 1;
+    int epochs = 10;
     double lossLimit = 0.05;
     IFitCallback collector = new ConvergenceCollector();
 
@@ -119,5 +119,9 @@ public class NN implements IFunctionApproximation {
                 return null;
             }
         }, new GradientDescent(0, 0), loss, 1, 0) / dataSet.getX().size();
+    }
+
+    public RobotDataSet getDataSet() {
+        return dataSet;
     }
 }

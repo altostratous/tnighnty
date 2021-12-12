@@ -29,6 +29,15 @@ public class TestTNinetyRobot {
 //        testRobot(new LUTTNinetyRobotTerminal(), 500, 100);
 //        testRobot(new LUTTNinetyRobot05(), 100, 100);
 //        testRobot(new LUTTNinetyRobot(), 500, 2);
+//        NN functionApproximation = (NN) (new NNTNinetyRobot()).getLearning().getFunctionApproximation();
+//        var dataSet = functionApproximation.getDataSet();
+//        for (int i = 0; i < dataSet.getX().size(); i++) {
+//            double[] x = dataSet.getX().get(i);
+//            for (int j = 0; j < x.length; j++) {
+//                System.out.print(x[j] + " ");
+//            }
+//            System.out.println(dataSet.getY().get(i)[0]);
+//        }
         testRobot(new NNTNinetyRobot(), 1, 100);
     }
 
@@ -36,7 +45,7 @@ public class TestTNinetyRobot {
 
         String outputFileName = "doc/" + trainRobot.getClass().getName() + ".tex";
 //        new File(outputFileName).deleteOnExit();
-        new File("NNTNinetyRobot.obj").deleteOnExit();
+//        new File("NNTNinetyRobot.obj").deleteOnExit();
         ArrayList<IState> states = new ArrayList<>();
         NNTNinetyRobotConfident testRobot = new NNTNinetyRobotConfident();
         Corners opponent = new Corners();
