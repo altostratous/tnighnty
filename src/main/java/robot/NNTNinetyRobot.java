@@ -19,7 +19,7 @@ public class NNTNinetyRobot extends QLearningRobot {
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new TNinetyActionRepresentation();
         IStateRepresentation stateRepresentation = new StateRep();
-        IFunctionApproximation functionApproximation = new NN("NNTNinetyRobot.obj", false);
+        IFunctionApproximation functionApproximation = new NN("NNTNinetyRobot.obj", true);
         IPolicy policy = new EnergyReward();
         return new QLearning(
                 stateRepresentation,

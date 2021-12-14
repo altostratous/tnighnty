@@ -40,7 +40,7 @@ public class TestTNinetyRobot {
 //            }
 //            System.out.println(dataSet.getY().get(i)[0]);
 //        }
-        testRobot(new NNTNinetyRobot(), 100000, 100);
+        testRobot(new NNTNinetyRobot(), 1, 100);
     }
 
     private void testRobot(Robot trainRobot, int rounds, int battles) {
@@ -85,11 +85,11 @@ public class TestTNinetyRobot {
             BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
             Robot robot;
             if (i % 2 == 0) {
-                engine.setVisible(true);
+                engine.setVisible(false);
                 robot = trainRobot;
             } else {
                 numberOfRounds = 100;
-                engine.setVisible(false);
+                engine.setVisible(true);
                 robot = testRobot;
             }
             RobotSpecification[] selectedRobots = engine.getLocalRepository(robot.getClass().getCanonicalName() + "*," + opponent.getClass().getCanonicalName() + "*");

@@ -13,7 +13,9 @@ import representation.Concatenation;
 import representation.States;
 import representation.TNinetyAction;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 public class TestLUTNN {
@@ -29,7 +31,7 @@ public class TestLUTNN {
         IDataSet dataSet = new LookupTableDataSet(lut);
 
         var model = Factory.createNeuralNetwork(
-                new int[]{15, 2, 1},
+                new int[]{15, 15, 1},
                 new BipolarSigmoid(),
                 new UniformInitializer(-0.05, 0.05),
                 false
@@ -51,6 +53,7 @@ public class TestLUTNN {
             var loss = new MeanSquaredError(model.getOutput());
             var collector = new ConvergenceCollector();
             double finalLoss = model.fit(dataSet, optimizer, loss, 100, 0.05, collector, true);
+            new ObjectOutputStream(new FileOutputStream("TrainedNN.obj")).writeObject(model.getTrainableParameters());
             if (finalLoss > 0.05) {
                 System.out.println(Math.sqrt(finalLoss / lut.getSize()));
                 var fireKey = new Concatenation(

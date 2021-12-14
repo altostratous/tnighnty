@@ -11,6 +11,7 @@ import nn.*;
 import optimization.GradientDescent;
 import optimization.ILoss;
 import optimization.IOptimizer;
+import org.junit.runners.parameterized.ParametersRunnerFactory;
 import representation.IRepresentable;
 
 import java.io.*;
@@ -18,7 +19,7 @@ import java.io.*;
 // TODO Christina and Husna
 public class NN implements IFunctionApproximation {
     Model model = Factory.createNeuralNetwork(
-            new int[]{12, 1},
+            new int[]{15, 15, 1},
             new BipolarSigmoid(),
             new UniformInitializer(-1, 1),
             false
@@ -28,7 +29,7 @@ public class NN implements IFunctionApproximation {
     IInitializer initializer;
     RobotDataSet dataSet = new RobotDataSet(20);
     ILoss loss = new MeanSquaredError(model.getOutput());
-    int epochs = 1000;
+    int epochs = 1;
     double lossLimit = 0.05;
     IFitCallback collector = new ConvergenceCollector();
 
@@ -92,12 +93,22 @@ public class NN implements IFunctionApproximation {
     @Override
     public void load() throws IOException, ClassNotFoundException {
         // load the weights of the neural network from the filePath
-        ObjectInputStream stream = new ObjectInputStream(new FileInputStream(this.filePath));
-        dataSet = (RobotDataSet) stream.readObject();
-        for (var param: model.getTrainableParameters()) {
-            param.setValue(((Parameter) stream.readObject()).getValue());
+
+        ObjectInputStream modelStream = new ObjectInputStream(new FileInputStream(this.getClass().getClassLoader().getResource("TrainedNN.obj").getPath()));
+        Parameter[] parameters = (Parameter[])(modelStream.readObject());
+        Parameter[] trainables = model.getTrainableParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            trainables[i].setValue(parameters[i].getValue());
         }
-        stream.close();
+        modelStream.close();
+
+        dataSet = new RobotDataSet(1);
+//        ObjectInputStream stream = new ObjectInputStream(new FileInputStream(this.filePath));
+//        dataSet = (RobotDataSet) stream.readObject();
+////        for (var param: model.getTrainableParameters()) {
+////            param.setValue(((Parameter) stream.readObject()).getValue());
+////        }
+//        stream.close();
     }
 
     @Override
