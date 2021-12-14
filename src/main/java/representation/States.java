@@ -63,7 +63,7 @@ public class States implements IState{
 //                (this.bearing + 45) / 90,
 //                this.myEnergy / 40,
 //                this.enemyEnergy / 40,
-                this.distance / 200,
+//                this.distance / 200,
         };
     }
 

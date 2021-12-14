@@ -4,6 +4,7 @@ import fa.IFunctionApproximation;
 import fa.LUT;
 import fa.NN;
 import jdk.jshell.spi.ExecutionControl;
+import org.junit.Ignore;
 import org.junit.Test;
 import representation.IState;
 import robocode.Robot;
@@ -22,6 +23,7 @@ import java.util.Objects;
 
 public class TestTNinetyRobot {
 
+//    @Ignore
     @Test
     public void TestTrivialLUTRobot() {
 //        testRobot(new LUTTNinetyRobot0(), 1, 100);
@@ -38,7 +40,7 @@ public class TestTNinetyRobot {
 //            }
 //            System.out.println(dataSet.getY().get(i)[0]);
 //        }
-        testRobot(new NNTNinetyRobot(), 1, 100);
+        testRobot(new NNTNinetyRobot(), 100000, 100);
     }
 
     private void testRobot(Robot trainRobot, int rounds, int battles) {
@@ -83,7 +85,7 @@ public class TestTNinetyRobot {
             BattlefieldSpecification battlefield = new BattlefieldSpecification(800, 600);
             Robot robot;
             if (i % 2 == 0) {
-                engine.setVisible(false);
+                engine.setVisible(true);
                 robot = trainRobot;
             } else {
                 numberOfRounds = 100;

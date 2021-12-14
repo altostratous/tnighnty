@@ -29,7 +29,7 @@ public class TestLUTNN {
         IDataSet dataSet = new LookupTableDataSet(lut);
 
         var model = Factory.createNeuralNetwork(
-                new int[]{15, 10, 1},
+                new int[]{15, 2, 1},
                 new BipolarSigmoid(),
                 new UniformInitializer(-0.05, 0.05),
                 false

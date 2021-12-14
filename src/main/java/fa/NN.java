@@ -18,17 +18,17 @@ import java.io.*;
 // TODO Christina and Husna
 public class NN implements IFunctionApproximation {
     Model model = Factory.createNeuralNetwork(
-            new int[]{15, 10, 1},
+            new int[]{12, 1},
             new BipolarSigmoid(),
-            new UniformInitializer(-0.05, 0.05),
+            new UniformInitializer(-1, 1),
             false
     );
-    IOptimizer optimizer = new GradientDescent(1e-4, 0.9);
+    IOptimizer optimizer = new GradientDescent(1e-4, 0.0);
     ILayer activation;
     IInitializer initializer;
     RobotDataSet dataSet = new RobotDataSet(20);
     ILoss loss = new MeanSquaredError(model.getOutput());
-    int epochs = 1;
+    int epochs = 1000;
     double lossLimit = 0.05;
     IFitCallback collector = new ConvergenceCollector();
 
@@ -51,11 +51,20 @@ public class NN implements IFunctionApproximation {
         System.out.println("SIZE: " + dataSet.getSize());
         // call fit on the neural network
         try {
+            DataPoint next = dataSet.next();
+            System.out.println("Desired: " + next.getY()[0]);
+            System.out.println("Before fit: " + model.evaluate(next.getX())[0]);
             var totalLoss = model.fit(dataSet, optimizer, loss, epochs, lossLimit);
+            System.out.println("After fit: " + model.evaluate(next.getX())[0]);
             System.out.println("LOSS: " + Math.sqrt(totalLoss / dataSet.getSize()));
         } catch (ExecutionControl.NotImplementedException e) {
             e.printStackTrace();
         }
+        for (var p :
+                model.getTrainableParameters()) {
+            System.out.print(p.getValue() + " ");
+        }
+        System.out.println();
     }
 
     @Override

@@ -2,13 +2,15 @@ package dataset;
 
 import representation.IRepresentable;
 
+import java.awt.geom.Line2D;
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class RobotDataSet implements IDataSet, Serializable {
-    ArrayList<double[]> x = new ArrayList<double[]>();
-    ArrayList<double[]> y = new ArrayList<double[]>();
+    LinkedList<double[]> x = new LinkedList<>();
+    LinkedList<double[]> y = new LinkedList<>();
     int index = 0;
     int offset = 0;
     int windowSize;
@@ -20,7 +22,9 @@ public class RobotDataSet implements IDataSet, Serializable {
         x.add(input.toVector());
         y.add(output);
         if (x.size() > windowSize) {
-            offset = x.size() - windowSize;
+            offset = 0;
+            x.removeFirst();
+            y.removeFirst();
         }
     }
 
@@ -54,11 +58,11 @@ public class RobotDataSet implements IDataSet, Serializable {
         return windowSize;
     }
 
-    public ArrayList<double[]> getX() {
+    public LinkedList<double[]> getX() {
         return x;
     }
 
-    public ArrayList<double[]> getY() {
+    public LinkedList<double[]> getY() {
         return y;
     }
 }

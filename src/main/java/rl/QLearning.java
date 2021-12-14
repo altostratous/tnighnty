@@ -75,23 +75,26 @@ public class QLearning implements ILearning {
         }
         if (history.size() < depth) return explore();
         IAction bestAction = exploit(currentState);
+        IAction backupAction;
         IAction toTakeAction;
         if (this.random.nextDouble() < this.epsilon) {
             IAction action = explore();
             logAction(currentState, action, "explored");
+            backupAction = action;
             toTakeAction = action;
         } else {
             logAction(currentState, bestAction, "exploited");
+            backupAction = bestAction;
             toTakeAction = bestAction;
         }
         if (!onlineLearning) {
-            toTakeAction = bestAction;
+            backupAction = bestAction;
         }
 
         for (int i = 0; i < history.size() - 1; i++) {
             oldSA = new Concatenation(oldSA, history.get(i));
         }
-        IRepresentable currentAction = stateActionRepresentation.represent(currentState, toTakeAction);
+        IRepresentable currentAction = stateActionRepresentation.represent(currentState, backupAction);
         for (int i = 1; i < history.size(); i++) {
             currentAction = new Concatenation(currentAction, history.get(i));
         }
@@ -101,7 +104,7 @@ public class QLearning implements ILearning {
 
         double currentQ = functionApproximation.eval(currentAction)[0];
         System.out.println("train " + oldQ + " = " + oldQ + " + " + alpha + " (" + r + " + " + gamma + " * " + currentQ  + " - " + oldQ + ")");
-        System.out.println("train " + oldSA + " " + toTakeAction);
+        System.out.println("train " + oldSA + " " + backupAction);
         functionApproximation.train(
                 oldSA,
                 new double[]{
