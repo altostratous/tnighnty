@@ -23,7 +23,7 @@ import java.util.Objects;
 
 public class TestTNinetyRobot {
 
-//    @Ignore
+    @Ignore
     @Test
     public void TestTrivialLUTRobot() {
 //        testRobot(new LUTTNinetyRobot0(), 1, 100);

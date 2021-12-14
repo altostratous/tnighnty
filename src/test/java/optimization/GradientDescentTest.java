@@ -1,8 +1,7 @@
 package optimization;
 
 import autograd.UniformInitializer;
-import dataset.BinaryToBipolarWrapper;
-import dataset.XORBinaryDataSet;
+import dataset.*;
 import jdk.jshell.spi.ExecutionControl;
 import nn.*;
 import org.junit.Assert;
@@ -122,5 +121,22 @@ public class GradientDescentTest {
         }
         outputGraphData("c", stats);
         Assert.assertTrue("Convergence with high probability busted! " + diverged + " failure out of " + trials, diverged < 6);
+    }
+
+    @Test
+    public void TestLookupNeuralNet() throws ExecutionControl.NotImplementedException, IOException {
+        var model = Factory.createNeuralNetwork(
+                new int[]{12, 1},
+                new BipolarSigmoid(),
+                new UniformInitializer(-0.5, 0.5),
+                false
+        );
+        double[] input = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1};
+        double desired = 2.1;
+        DataPointDataSet dataPointDataSet = new DataPointDataSet(new DataPoint(input, new double[]{desired}));
+        double toleratedError = 0.01;
+        double lossLimit = Math.pow(toleratedError, 2) / 2;
+        model.fit(dataPointDataSet, new GradientDescent(0.5, 0.), new MeanSquaredError(model.getOutput()), 1000, lossLimit);
+        Assert.assertEquals(model.evaluate(input)[0], desired, toleratedError);
     }
 }
