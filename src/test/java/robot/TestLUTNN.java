@@ -22,10 +22,41 @@ public class TestLUTNN {
 
     @Ignore
     @Test
-    public void TestBipolarMomentumGD() throws ExecutionControl.NotImplementedException, IOException, ClassNotFoundException {
-        int diverged = 0;
-        int trials = 3000;
-        ArrayList<ConvergenceCollector> stats = new ArrayList<>();
+    public void GridSearch() throws ExecutionControl.NotImplementedException, IOException, ClassNotFoundException {
+        
+        LUT lut = new LUT(this.getClass().getClassLoader().getResource("LUTTNinetyRobot.obj").getPath(), true);
+        lut.load();
+        System.out.println(lut.getSize());
+        Assert.assertTrue(false);
+        IDataSet dataSet = new LookupTableDataSet(lut);
+
+        for (double momentum :
+                new double[]{0., 0.5, 0.9}) {
+            for (double lr :
+                    new double[] {1e-4, 1e-3, 1e-2}) {
+                for (int hiddenNeurons :
+                        new int[]{5, 15, 30}) {
+                    var model = Factory.createNeuralNetwork(
+                            new int[]{15, hiddenNeurons, 1},
+                            new BipolarSigmoid(),
+                            new UniformInitializer(-0.05, 0.05),
+                            false
+                    );
+                    var optimizer = new GradientDescent(lr, momentum);
+
+                    var loss = new MeanSquaredError(model.getOutput());
+                    var collector = new ConvergenceCollector();
+                    double finalLoss = model.fit(dataSet, optimizer, loss, 100, 0.00, collector, true);
+                    System.out.println(lr + " " + momentum + " " + hiddenNeurons + " " + finalLoss);
+                }
+            }   
+        }
+    }
+
+//    @Ignore
+    @Test
+    public void BestGraph() throws ExecutionControl.NotImplementedException, IOException, ClassNotFoundException {
+
         LUT lut = new LUT(this.getClass().getClassLoader().getResource("LUTTNinetyRobot.obj").getPath(), true);
         lut.load();
         IDataSet dataSet = new LookupTableDataSet(lut);
@@ -36,68 +67,13 @@ public class TestLUTNN {
                 new UniformInitializer(-0.05, 0.05),
                 false
         );
-        var optimizer = new GradientDescent(1e-4, 0.9);
+        var optimizer = new GradientDescent(0.001, 0.5);
 
-        for (int i = 0; i < trials; i++) {
-//            for (int j = 0; j < 1; j++) {
-//                dataSet.reset();
-//                var p = dataSet.next();
-//                for (int k = 0; k < p.getX().length; k++) {
-//                    System.out.print(p.getX()[k] + " ");
-//                }
-//                System.out.println();
-//                System.out.println("Desired " + p.getY()[0]);
-//                System.out.println("model output " + model.evaluate(p.getX())[0]);
-//            }
-
-            var loss = new MeanSquaredError(model.getOutput());
-            var collector = new ConvergenceCollector();
-            double finalLoss = model.fit(dataSet, optimizer, loss, 100, 0.05, collector, true);
-            new ObjectOutputStream(new FileOutputStream("TrainedNN.obj")).writeObject(model.getTrainableParameters());
-            if (finalLoss > 0.05) {
-                System.out.println(Math.sqrt(finalLoss / lut.getSize()));
-                var fireKey = new Concatenation(
-                        new Concatenation(
-                                new Concatenation(
-                                        new States(500, 300, 300, 90, 100, 50, 90),
-                                        new TNinetyAction(TNinetyAction.ActionType.FIRE)
-                                ),
-                                new Concatenation(
-                                        new States(500, 300, 300, 90, 100, 50, 90),
-                                        new TNinetyAction(TNinetyAction.ActionType.FIRE)
-                                )
-                        ),
-                        new Concatenation(
-                                new States(500, 300, 300, 90, 100, 50, 90),
-                                new TNinetyAction(TNinetyAction.ActionType.FIRE)
-                        )
-                );
-
-                var aheadKey = new Concatenation(
-                        new Concatenation(
-                                new Concatenation(
-                                        new States(500, 300, 300, 90, 100, 50, 90),
-                                        new TNinetyAction(TNinetyAction.ActionType.AHEAD)
-                                ),
-                                new Concatenation(
-                                        new States(500, 300, 300, 90, 100, 50, 90),
-                                        new TNinetyAction(TNinetyAction.ActionType.FIRE)
-                                )
-                        ),
-                        new Concatenation(
-                                new States(500, 300, 300, 90, 100, 50, 90),
-                                new TNinetyAction(TNinetyAction.ActionType.FIRE)
-                        )
-                );
-//                System.out.println("FIRE from model " + model.evaluate(fireKey.toVector())[0]);
-//                System.out.println("FIRE from LUT " + lut.eval(fireKey)[0]);
-//                System.out.println("AHEAD from model " + model.evaluate(aheadKey.toVector())[0]);
-//                System.out.println("AHEAD from LUT " + lut.eval(aheadKey)[0]);
-//                System.out.println();
-                diverged += 1;
-            }
-            stats.add(collector);
+        var loss = new MeanSquaredError(model.getOutput());
+        var collector = new ConvergenceCollector();
+        for (int i = 0; i < 30; i++) {
+            double finalLoss = model.fit(dataSet, optimizer, loss, 100, 0.00, collector, true);
+            System.out.println((100 * i + 100) + " " + Math.sqrt(finalLoss / lut.getSize()));
         }
-        Assert.assertTrue("Convergence with high probability busted! " + diverged + " failure out of " + trials, diverged < 6);
     }
 }
