@@ -1,5 +1,5 @@
-<mxfile host="app.diagrams.net" modified="2021-12-15T19:01:25.990Z" agent="5.0 (X11)" etag="KTFSsR65lEwvj1Rqf4iw" version="14.7.4" type="github" pages="3">
-  <diagram id="3CKYK-o5kN8Lf_Ah0m3x" name="First architecture">
+<mxfile host="app.diagrams.net" modified="2021-12-15T19:06:41.720Z" agent="5.0 (X11)" etag="fEOEKMUFyGivV4OcrX6_" version="14.7.4" type="github" pages="3">
+  <diagram id="3CKYK-o5kN8Lf_Ah0m3x" name="first_architecture">
     <mxGraphModel dx="1350" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
@@ -136,7 +136,7 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="6T8OZc4nZSUXZcK4_PCE" name="Second architecture">
+  <diagram id="6T8OZc4nZSUXZcK4_PCE" name="second_architecture">
     <mxGraphModel dx="1350" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="gbC-SKzIt_a38yUJpiKg-0" />
@@ -291,7 +291,7 @@
       </root>
     </mxGraphModel>
   </diagram>
-  <diagram id="lAMqDg6LYr1XKRFMao71" name="Third architecture">
+  <diagram id="lAMqDg6LYr1XKRFMao71" name="third_architecture">
     <mxGraphModel dx="1350" dy="749" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="Kb8ATQMxvKYNJWmMYknI-0" />
