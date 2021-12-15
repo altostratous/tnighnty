@@ -1,3 +1,11 @@
 # Project exclude paths
 /target/
 ./*.obj
+doc/a.tex
+doc/b.tex
+doc/c.tex
+doc/a_avg.tex
+doc/b_avg.tex
+doc/c_avg.tex
+doc/robots.*.tex
+
