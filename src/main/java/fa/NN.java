@@ -11,7 +11,6 @@ import nn.*;
 import optimization.GradientDescent;
 import optimization.ILoss;
 import optimization.IOptimizer;
-import org.junit.runners.parameterized.ParametersRunnerFactory;
 import representation.IRepresentable;
 
 import java.io.*;
@@ -19,19 +18,19 @@ import java.io.*;
 // TODO Christina and Husna
 public class NN implements IFunctionApproximation {
     Model model = Factory.createNeuralNetwork(
-            new int[]{64, 1},
-            new Sigmoid(),
-//            new UniformInitializer(-1, 1),
-            new UniformInitializer(0, 0),
-            false,
+            new int[]{12, 12, 1},
+            new BipolarSigmoid(),
+            new UniformInitializer(-1, 1),
+//            new UniformInitializer(0, 0),
+            true,
             false
     );
-    IOptimizer optimizer = new GradientDescent(0.5, 0.0);
+    IOptimizer optimizer = new GradientDescent(0.01, 0.9);
     ILayer activation;
     IInitializer initializer;
-    RobotDataSet dataSet = new RobotDataSet(1);
+    RobotDataSet dataSet = new RobotDataSet(10);
     ILoss loss = new MeanSquaredError(model.getOutput());
-    int epochs = 1000;
+    int epochs = 1;
     double lossLimit = 0.000001;
     IFitCallback collector = new ConvergenceCollector();
 
@@ -50,7 +49,7 @@ public class NN implements IFunctionApproximation {
         System.out.print("train " + input + " to " + output[0]);
         System.out.println();
         // construct a single datapoint dataset out of the data point
-        dataSet.addPattern(to64(input.toVector()), output);
+        dataSet.addPattern(toInternalRepresentation(input.toVector()), output);
         System.out.println("SIZE: " + dataSet.getSize());
         // call fit on the neural network
         try {
@@ -61,25 +60,6 @@ public class NN implements IFunctionApproximation {
             var totalLoss = model.fit(dataSet, optimizer, loss, epochs, lossLimit);
             System.out.println("After fit: " + model.evaluate(next.getX())[0]);
             System.out.println("LOSS: " + Math.sqrt(totalLoss / dataSet.getSize()));
-            if (lossLimit < totalLoss) {
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-                System.out.println("DAMNDAMNDMA");
-            }
         } catch (ExecutionControl.NotImplementedException e) {
             e.printStackTrace();
         }
@@ -95,34 +75,26 @@ public class NN implements IFunctionApproximation {
     public double[] eval(IRepresentable input) {
         // feed the input to the neural network and return the outcome as the q value
         double[] input_vector = input.toVector();
-        return model.evaluate(to64(input_vector));
+        return model.evaluate(toInternalRepresentation(input_vector));
     }
 
-    private double[] to64(double[] rawPattern) {
-        double[] sixtyFourPattern = new double[64];
-        int sixtyFourIndex = 0;
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 4; j++) {
-                sixtyFourIndex += Math.pow(4, i) * j * rawPattern[i * 4 + j];
-            }
-        }
-        for (int i = 0; i < 64; i++) {
-            if (sixtyFourIndex == i) {
-                sixtyFourPattern[i] = 1;
-            } else {
-                sixtyFourPattern[i] = 0;
-            }
-        }
+    private double[] toInternalRepresentation(double[] rawPattern) {
+        return rawPattern;
+//        double[] sixtyFourPattern = new double[64];
+//        int sixtyFourIndex = 0;
+//        for (int i = 0; i < 3; i++) {
+//            for (int j = 0; j < 4; j++) {
+//                sixtyFourIndex += Math.pow(4, i) * j * rawPattern[i * 4 + j];
+//            }
+//        }
 //        for (int i = 0; i < 64; i++) {
-//            System.out.print(sixtyFourPattern[i] + " ");
+//            if (sixtyFourIndex == i) {
+//                sixtyFourPattern[i] = 1;
+//            } else {
+//                sixtyFourPattern[i] = 0;
+//            }
 //        }
-//        System.out.println();
-//        for (int i = 0; i < 12; i++) {
-//            System.out.print(rawPattern[i] + " ");
-//        }
-//        System.out.println(sixtyFourIndex);
-//        System.out.println();
-        return sixtyFourPattern;
+//        return sixtyFourPattern;
     }
 
     @Override
