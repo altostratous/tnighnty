@@ -19,18 +19,20 @@ import java.io.*;
 // TODO Christina and Husna
 public class NN implements IFunctionApproximation {
     Model model = Factory.createNeuralNetwork(
-            new int[]{15, 15, 1},
-            new BipolarSigmoid(),
-            new UniformInitializer(-1, 1),
+            new int[]{64, 1},
+            new Sigmoid(),
+//            new UniformInitializer(-1, 1),
+            new UniformInitializer(0, 0),
+            false,
             false
     );
-    IOptimizer optimizer = new GradientDescent(1e-4, 0.0);
+    IOptimizer optimizer = new GradientDescent(0.5, 0.0);
     ILayer activation;
     IInitializer initializer;
-    RobotDataSet dataSet = new RobotDataSet(20);
+    RobotDataSet dataSet = new RobotDataSet(1);
     ILoss loss = new MeanSquaredError(model.getOutput());
-    int epochs = 1;
-    double lossLimit = 0.05;
+    int epochs = 1000;
+    double lossLimit = 0.000001;
     IFitCallback collector = new ConvergenceCollector();
 
     private final String filePath;
@@ -48,19 +50,40 @@ public class NN implements IFunctionApproximation {
         System.out.print("train " + input + " to " + output[0]);
         System.out.println();
         // construct a single datapoint dataset out of the data point
-        dataSet.addPattern(input, output);
+        dataSet.addPattern(to64(input.toVector()), output);
         System.out.println("SIZE: " + dataSet.getSize());
         // call fit on the neural network
         try {
+            dataSet.reset();
             DataPoint next = dataSet.next();
             System.out.println("Desired: " + next.getY()[0]);
             System.out.println("Before fit: " + model.evaluate(next.getX())[0]);
             var totalLoss = model.fit(dataSet, optimizer, loss, epochs, lossLimit);
             System.out.println("After fit: " + model.evaluate(next.getX())[0]);
             System.out.println("LOSS: " + Math.sqrt(totalLoss / dataSet.getSize()));
+            if (lossLimit < totalLoss) {
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+                System.out.println("DAMNDAMNDMA");
+            }
         } catch (ExecutionControl.NotImplementedException e) {
             e.printStackTrace();
         }
+        System.out.println("So many parameters " + model.getTrainableParameters().length);
         for (var p :
                 model.getTrainableParameters()) {
             System.out.print(p.getValue() + " ");
@@ -72,7 +95,34 @@ public class NN implements IFunctionApproximation {
     public double[] eval(IRepresentable input) {
         // feed the input to the neural network and return the outcome as the q value
         double[] input_vector = input.toVector();
-        return model.evaluate(input_vector);
+        return model.evaluate(to64(input_vector));
+    }
+
+    private double[] to64(double[] rawPattern) {
+        double[] sixtyFourPattern = new double[64];
+        int sixtyFourIndex = 0;
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                sixtyFourIndex += Math.pow(4, i) * j * rawPattern[i * 4 + j];
+            }
+        }
+        for (int i = 0; i < 64; i++) {
+            if (sixtyFourIndex == i) {
+                sixtyFourPattern[i] = 1;
+            } else {
+                sixtyFourPattern[i] = 0;
+            }
+        }
+//        for (int i = 0; i < 64; i++) {
+//            System.out.print(sixtyFourPattern[i] + " ");
+//        }
+//        System.out.println();
+//        for (int i = 0; i < 12; i++) {
+//            System.out.print(rawPattern[i] + " ");
+//        }
+//        System.out.println(sixtyFourIndex);
+//        System.out.println();
+        return sixtyFourPattern;
     }
 
     @Override
@@ -94,21 +144,21 @@ public class NN implements IFunctionApproximation {
     public void load() throws IOException, ClassNotFoundException {
         // load the weights of the neural network from the filePath
 
-        ObjectInputStream modelStream = new ObjectInputStream(new FileInputStream(this.getClass().getClassLoader().getResource("TrainedNN.obj").getPath()));
-        Parameter[] parameters = (Parameter[])(modelStream.readObject());
-        Parameter[] trainables = model.getTrainableParameters();
-        for (int i = 0; i < parameters.length; i++) {
-            trainables[i].setValue(parameters[i].getValue());
-        }
-        modelStream.close();
+//        ObjectInputStream modelStream = new ObjectInputStream(new FileInputStream(this.getClass().getClassLoader().getResource("TrainedNN.obj").getPath()));
+//        Parameter[] parameters = (Parameter[])(modelStream.readObject());
+//        Parameter[] trainables = model.getTrainableParameters();
+//        for (int i = 0; i < parameters.length; i++) {
+//            trainables[i].setValue(parameters[i].getValue());
+//        }
+//        modelStream.close();
 
         dataSet = new RobotDataSet(1);
-//        ObjectInputStream stream = new ObjectInputStream(new FileInputStream(this.filePath));
-//        dataSet = (RobotDataSet) stream.readObject();
-////        for (var param: model.getTrainableParameters()) {
-////            param.setValue(((Parameter) stream.readObject()).getValue());
-////        }
-//        stream.close();
+        ObjectInputStream stream = new ObjectInputStream(new FileInputStream(this.filePath));
+        dataSet = (RobotDataSet) stream.readObject();
+        for (var param: model.getTrainableParameters()) {
+            param.setValue(((Parameter) stream.readObject()).getValue());
+        }
+        stream.close();
     }
 
     @Override

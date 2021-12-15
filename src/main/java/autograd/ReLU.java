@@ -2,9 +2,9 @@ package autograd;
 
 import jdk.jshell.spi.ExecutionControl;
 
-public class Sigmoid extends Operator {
+public class ReLU extends Operator {
 
-    public Sigmoid() {
+    public ReLU() {
         this.numberOfOperands = 1;
     }
 
@@ -13,7 +13,9 @@ public class Sigmoid extends Operator {
         if (operands.length != 1) {
             throw new IllegalArgumentException("Sigmoid operator only accepts one operand");
         }
-        return 1. / (1 + Math.exp(-operands[0].evaluate()));
+        double result = Math.max(0., operands[0].evaluate());
+//        System.out.println("ReLU " + result);
+        return result;
     }
 
     @Override
@@ -21,6 +23,13 @@ public class Sigmoid extends Operator {
         validateOperands(operands);
         var x = operands[0];
         var y = evaluate(operands);
-        x.backward(sources, gradient * y * (1 - y));
+//        System.out.println(gradient);
+        if (y > 0) {
+//            System.out.println("Gradient " + y + " " + gradient);
+            x.backward(sources, gradient);
+        } else {
+//            System.out.println("Gradient 0");
+            x.backward(sources, 0.);
+        }
     }
 }

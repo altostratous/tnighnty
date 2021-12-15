@@ -11,6 +11,6 @@ public class EnergyReward implements IPolicy {
         States lastStates = (States) last;
 //        return states.getMyEnergy() - states.getEnemyEnergy();
 
-        return lastStates.getEnemyEnergy() - states.getEnemyEnergy();
+        return (lastStates.getEnemyEnergy() - states.getEnemyEnergy());
     }
 }

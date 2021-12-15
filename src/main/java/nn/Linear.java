@@ -6,14 +6,17 @@ public class Linear implements ILayer {
     private final IVariable[][] weight;
     private final IVariable[] bias;
 
-    public Linear(int inFeatures, int outFeatures, IInitializer initializer) {
+    public Linear(int inFeatures, int outFeatures, IInitializer initializer, boolean useBiases) {
         this.weight = new Parameter[outFeatures][inFeatures];
         this.bias = new Parameter[outFeatures];
         for (int i = 0; i < outFeatures; i++) {
             for (int j = 0; j < inFeatures; j++) {
                 this.weight[i][j] = new Parameter(initializer.next());
             }
-            this.bias[i] = new Parameter(initializer.next());
+            if (useBiases)
+                this.bias[i] = new Parameter(initializer.next());
+            else
+                this.bias[i] = new Parameter(0., false);
         }
     }
 

@@ -8,19 +8,23 @@ public class Parameter implements IVariable, Serializable {
     private double gradient;
     private boolean trainable;
     private int layer;
+    private final int parameterId;
+    static transient int parameterCounter = 0;
 
     public Parameter() {
-
+        parameterId = parameterCounter++;
     }
 
     public Parameter(double value) {
         this.value = value;
         trainable = true;
+        parameterId = parameterCounter++;
     }
 
     public Parameter(double value, boolean trainable) {
         this.value = value;
         this.trainable = trainable;
+        parameterId = parameterCounter++;
     }
 
     public static IVariable[] createTensor(double[] desired) {
@@ -78,5 +82,9 @@ public class Parameter implements IVariable, Serializable {
 
     public void setLayer(int layer) {
         this.layer = layer;
+    }
+
+    public int getParameterId() {
+        return parameterId;
     }
 }

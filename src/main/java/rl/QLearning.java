@@ -77,13 +77,14 @@ public class QLearning implements ILearning {
         IAction bestAction = exploit(currentState);
         IAction backupAction;
         IAction toTakeAction;
-        if (this.random.nextDouble() < this.epsilon) {
+        double randomDouble = this.random.nextDouble();
+        boolean explored = false;
+        if (randomDouble < this.epsilon) {
             IAction action = explore();
-            logAction(currentState, action, "explored");
             backupAction = action;
             toTakeAction = action;
+            explored = true;
         } else {
-            logAction(currentState, bestAction, "exploited");
             backupAction = bestAction;
             toTakeAction = bestAction;
         }
@@ -98,6 +99,13 @@ public class QLearning implements ILearning {
         for (int i = 1; i < history.size(); i++) {
             currentAction = new Concatenation(currentAction, history.get(i));
         }
+
+        if (explored) {
+            logAction(currentAction, "explored");
+        } else {
+            logAction(currentAction, "exploited");
+        }
+
         double oldQ = functionApproximation.eval(oldSA)[0];
         double r = policy.getReward(currentState, lastState); // why would evaluate Rewards for last state?
 
@@ -141,14 +149,11 @@ public class QLearning implements ILearning {
         return bestAction;
     }
 
-    private void logAction(IState currentState, IAction bestAction, String hint) {
+    private void logAction(IRepresentable bestAction, String hint) {
         if (bestAction == null) return;
         System.out.print(bestAction);
         System.out.print(" " + hint + " ");
-        System.out.println(functionApproximation.eval(
-                stateActionRepresentation.represent(
-                        currentState, bestAction
-                ))[0]);
+        System.out.println(functionApproximation.eval(bestAction)[0]);
     }
 
     private IAction explore() {

@@ -18,8 +18,8 @@ public class RobotDataSet implements IDataSet, Serializable {
         this.windowSize = windowSize;
     }
 
-    public void addPattern(IRepresentable input, double[] output) {
-        x.add(input.toVector());
+    public void addPattern(double[] input, double[] output) {
+        x.add(input);
         y.add(output);
         if (x.size() > windowSize) {
             offset = 0;

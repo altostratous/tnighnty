@@ -13,6 +13,7 @@ import javax.swing.*;
 import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.IntFunction;
 import java.util.stream.Collectors;
 
 public class Model {
@@ -57,7 +58,7 @@ public class Model {
             results.remove(p);
         }
 
-        return results.toArray(new Parameter[0]);
+        return results.stream().sorted(Comparator.comparing(Parameter::getParameterId)).toArray(Parameter[]::new);
     }
 
     public IVariable[] getOutput() {

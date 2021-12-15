@@ -3,6 +3,7 @@ package robot;
 import fa.IFunctionApproximation;
 import fa.LUT;
 import fa.NN;
+import fa.NNLUT;
 import policy.EnergyReward;
 import policy.IPolicy;
 import representation.*;
@@ -19,7 +20,9 @@ public class NNTNinetyRobot extends QLearningRobot {
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new TNinetyActionRepresentation();
         IStateRepresentation stateRepresentation = new StateRep();
-        IFunctionApproximation functionApproximation = new NN("NNTNinetyRobot.obj", true);
+        IFunctionApproximation functionApproximation = new NN("NNTNinetyRobot.obj", false);
+//        IFunctionApproximation functionApproximation = new NNLUT();
+//        IFunctionApproximation functionApproximation = new LUT("NNTNinetyRobot.obj", false);
         IPolicy policy = new EnergyReward();
         return new QLearning(
                 stateRepresentation,

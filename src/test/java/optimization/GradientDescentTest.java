@@ -123,6 +123,34 @@ public class GradientDescentTest {
         Assert.assertTrue("Convergence with high probability busted! " + diverged + " failure out of " + trials, diverged < 6);
     }
 
+    @Ignore("ReLU not working on XOR or buggy")
+    @Test
+    public void TestBipolarMomentumGDReLU() throws ExecutionControl.NotImplementedException, IOException {
+
+        int diverged = 0;
+        int trials = GradientDescentTest.trials;
+        ArrayList<ConvergenceCollector> stats = new ArrayList<>();
+        for (int i = 0; i < trials; i++) {
+            var model = Factory.createNeuralNetwork(
+                    new int[]{2, 4, 1},
+                    new ReLU(),
+                    new UniformInitializer(-0.5, 0.5)
+            );
+            var dataSet = new BinaryToBipolarWrapper(new XORBinaryDataSet());
+            var optimizer = new GradientDescent(0.01, 0.9);
+            var loss = new MeanSquaredError(model.getOutput());
+            var collector = new ConvergenceCollector();
+            double finalLoss = model.fit(dataSet, optimizer, loss, 1000, 0.05, collector);
+            if (finalLoss > 0.05) {
+                diverged += 1;
+            }
+            stats.add(collector);
+        }
+        outputGraphData("c", stats);
+        Assert.assertTrue("Convergence with high probability busted! " + diverged + " failure out of " + trials, diverged < 6);
+    }
+
+
     @Test
     public void TestLookupNeuralNet() throws ExecutionControl.NotImplementedException, IOException {
         var model = Factory.createNeuralNetwork(

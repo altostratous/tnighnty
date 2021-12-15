@@ -23,7 +23,7 @@ import java.util.Objects;
 
 public class TestTNinetyRobot {
 
-    @Ignore
+//    @Ignore
     @Test
     public void TestTrivialLUTRobot() {
 //        testRobot(new LUTTNinetyRobot0(), 1, 100);
@@ -48,6 +48,8 @@ public class TestTNinetyRobot {
         String outputFileName = "doc/" + trainRobot.getClass().getName() + ".tex";
 //        new File(outputFileName).deleteOnExit();
         new File("NNTNinetyRobot.obj").deleteOnExit();
+        new File("NNTNinetyRobot.LUT").deleteOnExit();
+        new File("NNTNinetyRobot.NN").deleteOnExit();
         ArrayList<IState> states = new ArrayList<>();
         NNTNinetyRobotConfident testRobot = new NNTNinetyRobotConfident();
         Corners opponent = new Corners();
@@ -89,7 +91,7 @@ public class TestTNinetyRobot {
                 robot = trainRobot;
             } else {
                 numberOfRounds = 100;
-                engine.setVisible(true);
+                engine.setVisible(false);
                 robot = testRobot;
             }
             RobotSpecification[] selectedRobots = engine.getLocalRepository(robot.getClass().getCanonicalName() + "*," + opponent.getClass().getCanonicalName() + "*");
