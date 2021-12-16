@@ -53,7 +53,7 @@ public class TestLUTNN {
         }
     }
 
-//    @Ignore
+    @Ignore
     @Test
     public void BestGraph() throws ExecutionControl.NotImplementedException, IOException, ClassNotFoundException {
 

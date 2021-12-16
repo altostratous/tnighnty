@@ -25,10 +25,11 @@ public class NN implements IFunctionApproximation {
             true,
             false
     );
-    IOptimizer optimizer = new GradientDescent(0.01, 0.9);
+    IOptimizer optimizer = new GradientDescent(0.0001, 0.9);
     ILayer activation;
     IInitializer initializer;
-    RobotDataSet dataSet = new RobotDataSet(10);
+    int windowSize;
+    RobotDataSet dataSet;
     ILoss loss = new MeanSquaredError(model.getOutput());
     int epochs = 1;
     double lossLimit = 0.000001;
@@ -41,8 +42,15 @@ public class NN implements IFunctionApproximation {
         // construct the neural network
         this.filePath = filePath;
         this.readOnly = readOnly;
+        this.windowSize = 1;
     }
 
+    public NN(String filePath, boolean readOnly, int windowSize) {
+        // construct the neural network
+        this.filePath = filePath;
+        this.readOnly = readOnly;
+        this.windowSize = windowSize;
+    }
     @Override
     public void train(IRepresentable input, double[] output) {
         if (readOnly) {return;}
@@ -124,7 +132,7 @@ public class NN implements IFunctionApproximation {
 //        }
 //        modelStream.close();
 
-        dataSet = new RobotDataSet(1);
+        dataSet = new RobotDataSet(windowSize);
         ObjectInputStream stream = new ObjectInputStream(new FileInputStream(this.filePath));
         dataSet = (RobotDataSet) stream.readObject();
         for (var param: model.getTrainableParameters()) {

@@ -14,6 +14,9 @@ import robocode.control.RobocodeEngine;
 import robocode.control.RobotSpecification;
 import robocode.control.events.BattleAdaptor;
 import robocode.control.events.BattleCompletedEvent;
+import robocode.control.events.RoundEndedEvent;
+import robocode.control.events.TurnEndedEvent;
+import robocode.control.snapshot.IRobotSnapshot;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,7 +26,7 @@ import java.util.Objects;
 
 public class TestTNinetyRobot {
 
-    @Ignore
+//    @Ignore
     @Test
     public void TestTrivialLUTRobot() {
 //        testRobot(new LUTTNinetyRobot0(), 1, 100);
@@ -57,6 +60,30 @@ public class TestTNinetyRobot {
         RobocodeEngine.setLogMessagesEnabled(false);
         RobocodeEngine engine = new RobocodeEngine(new File(System.getProperty("user.home") + "/robocode/"));
         engine.addBattleListener(new BattleAdaptor() {
+
+            int turns = 0;
+            TurnEndedEvent turnEndedEvent;
+
+            @Override
+            public void onTurnEnded(TurnEndedEvent event) {
+                super.onTurnEnded(event);
+                turnEndedEvent = event;
+            }
+
+            @Override
+            public void onRoundEnded(RoundEndedEvent event) {
+                super.onRoundEnded(event);
+                IRobotSnapshot[] robots = turnEndedEvent.getTurnSnapshot().getRobots();
+                for (IRobotSnapshot robot :
+                        robots) {
+                    if (robot.getName().equals("robot.NNTNinetyRobotConfident*")) {
+                        if (robot.getEnergy() > 0.) {
+                            turns += event.getTotalTurns();
+                        }
+                    }
+                }
+            }
+
             @Override
             public void onBattleCompleted(BattleCompletedEvent event) {
                 super.onBattleCompleted(event);
@@ -66,8 +93,8 @@ public class TestTNinetyRobot {
                     for (var result :
                             event.getIndexedResults()) {
                         if (Objects.equals(result.getTeamLeaderName(), testRobot.getClass().getCanonicalName() + "*")) {
-                            of.write(result.getFirsts() + " ");
-                            System.out.println(result.getFirsts());
+                            of.write(result.getFirsts() + " " + (turns / (double) (result.getFirsts() + 1)) + "\n");
+                            System.out.print(result.getFirsts() + " ");
                             shouldPrint = true;
                         }
                     }
@@ -80,6 +107,7 @@ public class TestTNinetyRobot {
                 } catch (IOException | ExecutionControl.NotImplementedException e) {
                     e.printStackTrace();
                 }
+                turns = 0;
             }
         });
         for (int i = 0; i < battles; i++) {
