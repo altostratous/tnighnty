@@ -1,18 +1,15 @@
 package robot;
 
 import fa.IFunctionApproximation;
-import fa.LUT;
 import fa.NN;
-import fa.NNLUT;
 import policy.EnergyReward;
 import policy.IPolicy;
 import representation.*;
 import rl.ILearning;
 import rl.QLearning;
-import robocode.Robot;
 
-public class NNTNinetyRobot extends QLearningRobot {
-    public NNTNinetyRobot() {
+public class NNTNinetyRobotw1g9 extends QLearningRobot {
+    public NNTNinetyRobotw1g9() {
         super(createLearning());
     }
 

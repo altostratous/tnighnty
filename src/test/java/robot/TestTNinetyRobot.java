@@ -43,7 +43,7 @@ public class TestTNinetyRobot {
 //            }
 //            System.out.println(dataSet.getY().get(i)[0]);
 //        }
-        testRobot(new NNTNinetyRobot(), 100, 100);
+        testRobot(new NNTNinetyRobotw1g9(), 100, 100);
     }
 
     private void testRobot(Robot trainRobot, int rounds, int battles) {
@@ -61,7 +61,8 @@ public class TestTNinetyRobot {
         RobocodeEngine engine = new RobocodeEngine(new File(System.getProperty("user.home") + "/robocode/"));
         engine.addBattleListener(new BattleAdaptor() {
 
-            int turns = 0;
+            double energy = 0;
+            int battles = 0;
             TurnEndedEvent turnEndedEvent;
 
             @Override
@@ -77,9 +78,7 @@ public class TestTNinetyRobot {
                 for (IRobotSnapshot robot :
                         robots) {
                     if (robot.getName().equals("robot.NNTNinetyRobotConfident*")) {
-                        if (robot.getEnergy() > 0.) {
-                            turns += event.getTotalTurns();
-                        }
+                        energy += robot.getEnergy();
                     }
                 }
             }
@@ -93,7 +92,8 @@ public class TestTNinetyRobot {
                     for (var result :
                             event.getIndexedResults()) {
                         if (Objects.equals(result.getTeamLeaderName(), testRobot.getClass().getCanonicalName() + "*")) {
-                            of.write(result.getFirsts() + " " + (turns / (double) (result.getFirsts() + 1)) + "\n");
+                            battles += 1;
+                            of.write((battles * rounds) + " " + result.getFirsts() + " " + (energy / 100) + "\n");
                             System.out.print(result.getFirsts() + " ");
                             shouldPrint = true;
                         }
@@ -107,7 +107,7 @@ public class TestTNinetyRobot {
                 } catch (IOException | ExecutionControl.NotImplementedException e) {
                     e.printStackTrace();
                 }
-                turns = 0;
+                energy = 0;
             }
         });
         for (int i = 0; i < battles; i++) {

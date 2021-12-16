@@ -25,7 +25,7 @@ public class NN implements IFunctionApproximation {
             true,
             false
     );
-    IOptimizer optimizer = new GradientDescent(0.0001, 0.9);
+    IOptimizer optimizer = new GradientDescent(0.001, 0.5);
     ILayer activation;
     IInitializer initializer;
     int windowSize;
