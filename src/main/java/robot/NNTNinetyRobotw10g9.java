@@ -8,8 +8,8 @@ import representation.*;
 import rl.ILearning;
 import rl.QLearning;
 
-public class NNTNinetyRobotw1g9 extends QLearningRobot {
-    public NNTNinetyRobotw1g9() {
+public class NNTNinetyRobotw10g9 extends QLearningRobot {
+    public NNTNinetyRobotw10g9() {
         super(createLearning());
     }
 
@@ -17,7 +17,7 @@ public class NNTNinetyRobotw1g9 extends QLearningRobot {
     public static ILearning createLearning() {
         IActionRepresentation actionRepresentation = new TNinetyActionRepresentation();
         IStateRepresentation stateRepresentation = new StateRep();
-        IFunctionApproximation functionApproximation = new NN("NNTNinetyRobot.obj", false, 1);
+        IFunctionApproximation functionApproximation = new NN("NNTNinetyRobot.obj", false, 10);
 //        IFunctionApproximation functionApproximation = new NNLUT();
 //        IFunctionApproximation functionApproximation = new LUT("NNTNinetyRobot.obj", false);
         IPolicy policy = new EnergyReward();

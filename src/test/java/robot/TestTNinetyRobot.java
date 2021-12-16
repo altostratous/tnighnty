@@ -43,7 +43,8 @@ public class TestTNinetyRobot {
 //            }
 //            System.out.println(dataSet.getY().get(i)[0]);
 //        }
-        testRobot(new NNTNinetyRobotw1g9(), 100, 100);
+
+        testRobot(new NNTNinetyRobotw1g9(), 50, 100);
     }
 
     private void testRobot(Robot trainRobot, int rounds, int battles) {
@@ -62,6 +63,7 @@ public class TestTNinetyRobot {
         engine.addBattleListener(new BattleAdaptor() {
 
             double energy = 0;
+            double enemyEnergy = 0;
             int battles = 0;
             TurnEndedEvent turnEndedEvent;
 
@@ -79,6 +81,8 @@ public class TestTNinetyRobot {
                         robots) {
                     if (robot.getName().equals("robot.NNTNinetyRobotConfident*")) {
                         energy += robot.getEnergy();
+                    } else {
+                        enemyEnergy += robot.getEnergy();
                     }
                 }
             }
@@ -93,13 +97,13 @@ public class TestTNinetyRobot {
                             event.getIndexedResults()) {
                         if (Objects.equals(result.getTeamLeaderName(), testRobot.getClass().getCanonicalName() + "*")) {
                             battles += 1;
-                            of.write((battles * rounds) + " " + result.getFirsts() + " " + (energy / 100) + "\n");
+                            of.write((battles * rounds) + " " + result.getFirsts() + " " + (energy / 100) + " " + (enemyEnergy / 100) + "\n");
                             System.out.print(result.getFirsts() + " ");
                             shouldPrint = true;
                         }
                     }
                     if (shouldPrint) {
-                        NN functionApproximation = (NN) (new NNTNinetyRobot()).getLearning().getFunctionApproximation();
+                        NN functionApproximation = (NN) (new NNTNinetyRobotConfident()).getLearning().getFunctionApproximation();
                         System.out.println(functionApproximation.getSize() + "\n");
                         System.out.println(functionApproximation.getLoss() + "\n");
                     }
@@ -108,6 +112,7 @@ public class TestTNinetyRobot {
                     e.printStackTrace();
                 }
                 energy = 0;
+                enemyEnergy = 0;
             }
         });
         for (int i = 0; i < battles; i++) {
